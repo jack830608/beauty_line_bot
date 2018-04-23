@@ -6,5 +6,4 @@ let order = {
     name: { type: String },
     note: { type: String },
     code: { type: String }
-
 }
