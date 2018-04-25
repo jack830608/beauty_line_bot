@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>註冊</title>
+</head>
+<body style="background-color: white">
+	<div style="color: black">建立您的管理帳號</div>
+	<br>
+	<form action="/admin/signup" method="POST" style="color: black">
+		帳號 :       <input type="text" name="username"> <br>
+		密碼 :       <input type="text" name="password"> <br>
+		再次輸入密碼 : <input type="text" name="password2"> <br>
+		<button type="submit">確認</button>
+	</form>
+
+<div style="color: red">{{ errorMessages }}</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>門市管理</title>
+    <style>
+    .store {
+        display: inline-block;
+        width: 25%;
+        height: 100px;
+        border-width: 3px;
+        border-style: dashed;
+        border-color: #FFAC55;
+        padding: 10px;
+        font-family: 微軟正黑體
+    }
+    </style>
+</head>
+
+<body>
+    <h1 style="font-family: 微軟正黑體">門市管理</h1>
+    <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
+    <button style="font-family: 微軟正黑體" onclick="location.href='/store/add'">新增分店</button>
+    <br>
+    <br>
+    <div class="store">{{QQ[0].name}}&nbsp;&nbsp;{{QQ[0].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[0].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[1].name}}&nbsp;&nbsp;{{QQ[1].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[1].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[2].name}}&nbsp;&nbsp;{{QQ[2].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[2].name}}">管理</a></div>
+    </div>
+    <br>
+    <br>
+    <div class="store">{{QQ[3].name}}&nbsp;&nbsp;{{QQ[3].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[3].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[4].name}}&nbsp;&nbsp;{{QQ[4].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[4].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[5].name}}&nbsp;&nbsp;{{QQ[5].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[5].name}}">管理</a></div>
+    </div>
+    <br>
+    <br>
+    <div class="store">{{QQ[6].name}}&nbsp;&nbsp;{{QQ[6].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[6].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[7].name}}&nbsp;&nbsp;{{QQ[7].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[7].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[8].name}}&nbsp;&nbsp;{{QQ[8].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[8].name}}">管理</a></div>
+    </div>
+    <br>
+    <br>
+    <div class="store">{{QQ[9].name}}&nbsp;&nbsp;{{QQ[9].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[9].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[10].name}}&nbsp;&nbsp;{{QQ[10].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[10].name}}">管理</a></div>
+    </div>
+    <div class="store">{{QQ[11].name}}&nbsp;&nbsp;{{QQ[11].sameTimeBook}}人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{QQ[11].name}}">管理</a></div>
+    </div>
+    <br>
+    <br>
+</body>
+
+</html>
