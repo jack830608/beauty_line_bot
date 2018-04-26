@@ -17,42 +17,43 @@
     </script>
     <h1 style="font-family: 微軟正黑體">管理門市</h1>
     <br>
-    <form action="/store/update/{{storename}}" method="POST" style="font-family: 微軟正黑體">
+    <form action="/store/update/{{storeId}}" method="POST" style="font-family: 微軟正黑體 ;display:inline">
         分店名稱：
-        <input type="text" name="newname" value="{{storename}}">
+        <input type="text" name="newname" value="{{storename}}"> <span style="font-size: 10px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</span>
         <br>
         <br> 同時段可接受名額數量 :
         <!--         <input type="text" name="newsameTimeBook" value="{{storenum}}"> -->
         <select name="newsameTimeBook" value="{{storenum}}">
             <option value="{{storenum}}">{{storenum}}</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option value=5>5</option>
+            <option value=6>6</option>
+            <option value=7>7</option>
+            <option value=8>8</option>
+            <option value=9>9</option>
+            <option value=10>10</option>
+            <option value=11>11</option>
+            <option value=12>12</option>
+            <option value=13>13</option>
+            <option value=14>14</option>
+            <option value=15>15</option>
+            <option value=16>16</option>
+            <option value=17>17</option>
+            <option value=18>18</option>
+            <option value=19>19</option>
+            <option value=20>20</option>
         </select>
         <br>
         <br>
         <button type="submit">更新</button>
     </form>
-    <form action="/store/delete/{{storename}}" method="POST" style="color: black" onSubmit="return CheckForm();">
+    <form action="/store/delete/{{storeId}}" method="POST" style="color: black;display:inline" onSubmit="return CheckForm();">
         <button type="submit">刪除</button>
     </form>
+    <span><button onclick="location.href='/store'">取消</button></span>
 </body>
 
 </html>

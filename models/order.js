@@ -10,7 +10,8 @@ let schema = new Schema({
     phone: { type: Number },
     name: { type: String },
     note: { type: String },
-    code: { type: String }
+    code: { type: String },
+    cancel: { type: Boolean, default: false },
 }).plugin(plugin)
 
 module.exports = mongoose.model('Order', schema)
