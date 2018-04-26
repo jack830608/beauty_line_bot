@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>門市管理</title>
+    <style>
+    .store {
+        display: inline-block;
+        width: 25%;
+        height: 100px;
+        border-width: 3px;
+        border-style: dashed;
+        border-color: #FFAC55;
+        padding: 10px;
+        font-family: 微軟正黑體
+    }
+    </style>
+</head>
+
+<body>
+    <h1 style="font-family: 微軟正黑體">門市管理</h1>
+    <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
+    <button style="font-family: 微軟正黑體" onclick="location.href='/store/add'">新增分店</button>
+    <br>
+    <br> {% for store in stores %}
+    <div class="store">{{ store.name }} {{ store.sameTimeBook }} 人
+        <br>
+        <br>
+        <br>
+        <div align="right"><a href="/store/update/{{store._id}}">管理</a></div>
+    </div>
+    {% endfor %}
+    <br>
+    <br>
+</body>
+
+</html>
