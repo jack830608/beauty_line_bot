@@ -1,59 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>管理分店</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <style>
+    .store {
+        display: inline-block;
+        width: 25%;
+        height: 100px;
+        border-width: 3px;
+        border-style: solid;
+        border-color: black;
+        padding: 10px;
+        font-family: 微軟正黑體
+    }
+    </style>
+    <title>{{title}}</title>
+    <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/simple-sidebar.css" rel="stylesheet">
 </head>
 
-<body style="background-color: white">
-    <script language="Javascript">
-    function CheckForm() {
-        if (confirm("確認刪除？ 刪除分店後,連同班表及相關資料一併移除！") == true)
-            return true;
-        else
-            return false;
-    }
+<body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                </li>
+                <li>
+                    <a href="/order">訂單管理</a>
+                </li>
+                <li>
+                    <a href="/store">門市管理</a>
+                </li>
+                <li>
+                    <a href="/store/init">初始化修改</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <script language="Javascript">
+                function CheckForm() {
+                    if (confirm("確認刪除？ 刪除分店後,連同班表及相關資料一併移除！") == true)
+                        return true;
+                    else
+                        return false;
+                }
+                </script>
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                <br>
+                <br>
+                <h1 style="font-family: 微軟正黑體">管理門市</h1>
+                <br>
+                <form action="/store/update/{{storeId}}" method="POST" style="font-family: 微軟正黑體 ;display:inline">
+                    分店名稱：
+                    <input type="text" name="newname" value="{{storename}}"> <span style="font-size: 10px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</span>
+                    <br>
+                    <br> 同時段可接受名額數量 :
+                    <select name="newsameTimeBook" value="{{storenum}}">
+                        <option value="{{storenum}}">{{storenum}}</option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                        <option value=16>16</option>
+                        <option value=17>17</option>
+                        <option value=18>18</option>
+                        <option value=19>19</option>
+                        <option value=20>20</option>
+                    </select>
+                    <br>
+                    <br>
+                    <button type="submit">更新</button>
+                </form>
+                <form action="/store/delete/{{storeId}}" method="POST" style="color: black;display:inline" onSubmit="return CheckForm();">
+                    <button type="submit">刪除</button>
+                </form>
+                <span><button onclick="location.href='/store'">取消</button></span>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
     </script>
-    <h1 style="font-family: 微軟正黑體">管理門市</h1>
-    <br>
-    <form action="/store/update/{{storeId}}" method="POST" style="font-family: 微軟正黑體 ;display:inline">
-        分店名稱：
-        <input type="text" name="newname" value="{{storename}}"> <span style="font-size: 10px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</span>
-        <br>
-        <br> 同時段可接受名額數量 :
-        <!--         <input type="text" name="newsameTimeBook" value="{{storenum}}"> -->
-        <select name="newsameTimeBook" value="{{storenum}}">
-            <option value="{{storenum}}">{{storenum}}</option>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-            <option value=6>6</option>
-            <option value=7>7</option>
-            <option value=8>8</option>
-            <option value=9>9</option>
-            <option value=10>10</option>
-            <option value=11>11</option>
-            <option value=12>12</option>
-            <option value=13>13</option>
-            <option value=14>14</option>
-            <option value=15>15</option>
-            <option value=16>16</option>
-            <option value=17>17</option>
-            <option value=18>18</option>
-            <option value=19>19</option>
-            <option value=20>20</option>
-        </select>
-        <br>
-        <br>
-        <button type="submit">更新</button>
-    </form>
-    <form action="/store/delete/{{storeId}}" method="POST" style="color: black;display:inline" onSubmit="return CheckForm();">
-        <button type="submit">刪除</button>
-    </form>
-    <span><button onclick="location.href='/store'">取消</button></span>
 </body>
 
 </html>

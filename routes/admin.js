@@ -4,7 +4,7 @@ var Admin = require('../models/admin')
 module.exports = function(app) {
 
     app.get('/admin', function(req, res) {
-        res.render('../views/management.html')
+        res.render('../views/base.html')
     })
 
     app.get('/admin/signin', function(req, res) {

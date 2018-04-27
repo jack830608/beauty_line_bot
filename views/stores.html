@@ -1,38 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>門市管理</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <style>
     .store {
         display: inline-block;
         width: 25%;
         height: 100px;
         border-width: 3px;
-        border-style: dashed;
-        border-color: #FFAC55;
+        border-style: solid;
+        border-color: black;
         padding: 10px;
         font-family: 微軟正黑體
     }
     </style>
+    <title>{{title}}</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/simple-sidebar.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1 style="font-family: 微軟正黑體">門市管理</h1>
-    <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
-    <button style="font-family: 微軟正黑體" onclick="location.href='/store/add'">新增分店</button>
-    <br>
-    <br> {% for store in stores %}
-    <div class="store">{{ store.name }} {{ store.sameTimeBook }} 人
-        <br>
-        <br>
-        <br>
-        <div align="right"><a href="/store/update/{{store._id}}">管理</a></div>
-    </div>
-    {% endfor %}
-    <br>
-    <br>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                </li>
+                <li>
+                    <a href="/order">訂單管理</a>
+                </li>
+                <li>
+                    <a href="/store">門市管理</a>
+                </li>
+                <li>
+                    <a href="/store/init">初始化修改</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div>
+                    <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                    <br>
+                    <br>
+                    <h1 style="font-family: 微軟正黑體 ">門市管理</h1>
+                    <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
+                    <button style="font-family: 微軟正黑體" onclick="location.href='/store/add'">新增分店</button>
+                    <br>
+                    <br> {% for store in stores %}
+                    <div class="store">{{ store.name }} {{ store.sameTimeBook }} 人
+                        <br>
+                        <br>
+                        <div align="right"><a href="/store/update/{{store._id}}">管理</a></div>
+                    </div>
+                    {% endfor %}
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <script src="js/jquery.min.js"></script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        </script>
 </body>
 
 </html>

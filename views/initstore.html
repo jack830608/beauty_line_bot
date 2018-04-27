@@ -2,202 +2,251 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>初始化修改</title>
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+    .store {
+        display: inline-block;
+        width: 25%;
+        height: 100px;
+        border-width: 3px;
+        border-style: solid;
+        border-color: black;
+        padding: 10px;
+        font-family: 微軟正黑體
+    }
+    </style>
+    <title>{{title}}</title>
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
 </head>
-<h1>初始化修改</h1>   
-<br>
-<div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
-<form action="/store/init" method="POST" style="font-family: 微軟正黑體 ">
-    <div>
-        門市<br>
-        <select name="name">
-            <br> {% for store in stores %}
-            <option value="{{ store.name }}">{{ store.name }}
-                </opion>
-                {% endfor %}
-        </select>
-        <br>
-        <br> ------------------------------------------
-        <br>
-        <br> 設定營業時間
-        <br>
-        <select name="startAt">
-            <option value="0">00:00</option>
-            <option value="0.5">00:30</option>
-            <option value="1">01:00</option>
-            <option value="1.5">01:30</option>
-            <option value="2">02:00</option>
-            <option value="2.5">02:30</option>
-            <option value="3">03:00</option>
-            <option value="3.5">03:30</option>
-            <option value="4">04:00</option>
-            <option value="4.5">04:30</option>
-            <option value="5">05:00</option>
-            <option value="5.5">05:30</option>
-            <option value="6">06:00</option>
-            <option value="6.5">06:30</option>
-            <option value="7">07:00</option>
-            <option value="7.5">07:30</option>
-            <option value="8">08:00</option>
-            <option value="8.5">08:30</option>
-            <option value="9">09:00</option>
-            <option value="9.5">09:30</option>
-            <option value="10">10:00</option>
-            <option value="10.5">10:30</option>
-            <option value="11">11:00</option>
-            <option value="11.5">11:30</option>
-            <option value="12">12:00</option>
-            <option value="12.5">12:30</option>
-            <option value="13">13:00</option>
-            <option value="13.5">13:30</option>
-            <option value="14">14:00</option>
-            <option value="14.5">14:30</option>
-            <option value="15">15:00</option>
-            <option value="15.5">15:30</option>
-            <option value="16">16:00</option>
-            <option value="16.5">16:30</option>
-            <option value="17">17:00</option>
-            <option value="17.5">17:30</option>
-            <option value="18">18:00</option>
-            <option value="18.5">18:30</option>
-            <option value="19">19:00</option>
-            <option value="19.5">19:30</option>
-            <option value="20">20:00</option>
-            <option value="20.5">20:30</option>
-            <option value="21">21:00</option>
-            <option value="21.5">21:30</option>
-            <option value="22">22:00</option>
-            <option value="22.5">22:30</option>
-            <option value="23">23:00</option>
-            <option value="23.5">23:30</option>
-        </select>
-        ~
-        <select name="endAt">
-            <option value="0">00:00</option>
-            <option value="0.5">00:30</option>
-            <option value="1">01:00</option>
-            <option value="1.5">01:30</option>
-            <option value="2">02:00</option>
-            <option value="2.5">02:30</option>
-            <option value="3">03:00</option>
-            <option value="3.5">03:30</option>
-            <option value="4">04:00</option>
-            <option value="4.5">04:30</option>
-            <option value="5">05:00</option>
-            <option value="5.5">05:30</option>
-            <option value="6">06:00</option>
-            <option value="6.5">06:30</option>
-            <option value="7">07:00</option>
-            <option value="7.5">07:30</option>
-            <option value="8">08:00</option>
-            <option value="8.5">08:30</option>
-            <option value="9">09:00</option>
-            <option value="9.5">09:30</option>
-            <option value="10">10:00</option>
-            <option value="10.5">10:30</option>
-            <option value="11">11:00</option>
-            <option value="11.5">11:30</option>
-            <option value="12">12:00</option>
-            <option value="12.5">12:30</option>
-            <option value="13">13:00</option>
-            <option value="13.5">13:30</option>
-            <option value="14">14:00</option>
-            <option value="14.5">14:30</option>
-            <option value="15">15:00</option>
-            <option value="15.5">15:30</option>
-            <option value="16">16:00</option>
-            <option value="16.5">16:30</option>
-            <option value="17">17:00</option>
-            <option value="17.5">17:30</option>
-            <option value="18">18:00</option>
-            <option value="18.5">18:30</option>
-            <option value="19">19:00</option>
-            <option value="19.5">19:30</option>
-            <option value="20">20:00</option>
-            <option value="20.5">20:30</option>
-            <option value="21">21:00</option>
-            <option value="21.5">21:30</option>
-            <option value="22">22:00</option>
-            <option value="22.5">22:30</option>
-            <option value="23">23:00</option>
-            <option value="23.5">23:30</option>
-        </select>
-        <br>
-        <br>------------------------------------------
-        <br>
-        <br>預約區間
-        <br>
-        <select name="bookingBlock">
-            <option value="0.5">30分鐘</option>
-            <option value="1">60分鐘</option>
-            <option value="1.5">90分鐘</option>
-            <option value="2">120分鐘</option>
-        </select>
-        <br>
-        <br> ------------------------------------------
-        <br>
-        <br> 設定店休日期
-        <br>
-        <input type="checkbox" name="checkMonth" value="true">每月固定
-        <input type="text" name='closeDateByMonth'><span style="font-size: 5px ;color: blue"> 多天請用逗號隔開 ex:5,15,30</span>
-        <br>
-        <input type="checkbox" name="checkWeek" value="true">每週固定
-        <select name="closeDateByWeek">
-            <option value="1">星期一</option>
-            <option value="2">星期二</option>
-            <option value="3">星期三</option>
-            <option value="4">星期四</option>
-            <option value="5">星期五</option>
-            <option value="6">星期六</option>
-            <option value="7">星期日</option>
-        </select>
-        <br>
-        <br> ------------------------------------------
-        <br>
-        <br> 接受幾天前開放預約
-        <br>
-        <select name="dayOfBook">
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-            <option value=6>6</option>
-            <option value=7>7</option>
-            <option value=8>8</option>
-            <option value=9>9</option>
-            <option value=10>10</option>
-            <option value=11>11</option>
-            <option value=12>12</option>
-            <option value=13>13</option>
-            <option value=14>14</option>
-            <option value=15>15</option>
-            <option value=16>16</option>
-            <option value=17>17</option>
-            <option value=18>18</option>
-            <option value=19>19</option>
-            <option value=20>20</option>
-            <option value=21>21</option>
-            <option value=22>22</option>
-            <option value=23>23</option>
-            <option value=24>24</option>
-            <option value=25>25</option>
-            <option value=26>26</option>
-            <option value=27>27</option>
-            <option value=28>28</option>
-            <option value=29>29</option>
-            <option value=30>30</option>
-        </select>天
-        <br>
-        <br> ------------------------------------------
-        <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button type="submit">確認</button>
-    </div>
-</form>
 
 <body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                </li>
+                <li>
+                    <a href="/order">訂單管理</a>
+                </li>
+                <li>
+                    <a href="/store">門市管理</a>
+                </li>
+                <li>
+                    <a href="/store/init">初始化修改</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                <br>
+                <br>
+                <h1>初始化修改</h1>
+                <br>
+                <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
+                <form action="/store/init" method="POST" style="font-family: 微軟正黑體 ">
+                    <div>
+                        門市
+                        <br>
+                        <select name="name">
+                            <br> {% for store in stores %}
+                            <option value="{{ store.name }}">{{ store.name }}
+                                </opion>
+                                {% endfor %}
+                        </select>
+                        <br>
+                        <br> ------------------------------------------
+                        <br>
+                        <br> 設定營業時間
+                        <br>
+                        <select name="startAt">
+                            <option value="0">00:00</option>
+                            <option value="0.5">00:30</option>
+                            <option value="1">01:00</option>
+                            <option value="1.5">01:30</option>
+                            <option value="2">02:00</option>
+                            <option value="2.5">02:30</option>
+                            <option value="3">03:00</option>
+                            <option value="3.5">03:30</option>
+                            <option value="4">04:00</option>
+                            <option value="4.5">04:30</option>
+                            <option value="5">05:00</option>
+                            <option value="5.5">05:30</option>
+                            <option value="6">06:00</option>
+                            <option value="6.5">06:30</option>
+                            <option value="7">07:00</option>
+                            <option value="7.5">07:30</option>
+                            <option value="8">08:00</option>
+                            <option value="8.5">08:30</option>
+                            <option value="9">09:00</option>
+                            <option value="9.5">09:30</option>
+                            <option value="10">10:00</option>
+                            <option value="10.5">10:30</option>
+                            <option value="11">11:00</option>
+                            <option value="11.5">11:30</option>
+                            <option value="12">12:00</option>
+                            <option value="12.5">12:30</option>
+                            <option value="13">13:00</option>
+                            <option value="13.5">13:30</option>
+                            <option value="14">14:00</option>
+                            <option value="14.5">14:30</option>
+                            <option value="15">15:00</option>
+                            <option value="15.5">15:30</option>
+                            <option value="16">16:00</option>
+                            <option value="16.5">16:30</option>
+                            <option value="17">17:00</option>
+                            <option value="17.5">17:30</option>
+                            <option value="18">18:00</option>
+                            <option value="18.5">18:30</option>
+                            <option value="19">19:00</option>
+                            <option value="19.5">19:30</option>
+                            <option value="20">20:00</option>
+                            <option value="20.5">20:30</option>
+                            <option value="21">21:00</option>
+                            <option value="21.5">21:30</option>
+                            <option value="22">22:00</option>
+                            <option value="22.5">22:30</option>
+                            <option value="23">23:00</option>
+                            <option value="23.5">23:30</option>
+                        </select>
+                        ~
+                        <select name="endAt">
+                            <option value="0">00:00</option>
+                            <option value="0.5">00:30</option>
+                            <option value="1">01:00</option>
+                            <option value="1.5">01:30</option>
+                            <option value="2">02:00</option>
+                            <option value="2.5">02:30</option>
+                            <option value="3">03:00</option>
+                            <option value="3.5">03:30</option>
+                            <option value="4">04:00</option>
+                            <option value="4.5">04:30</option>
+                            <option value="5">05:00</option>
+                            <option value="5.5">05:30</option>
+                            <option value="6">06:00</option>
+                            <option value="6.5">06:30</option>
+                            <option value="7">07:00</option>
+                            <option value="7.5">07:30</option>
+                            <option value="8">08:00</option>
+                            <option value="8.5">08:30</option>
+                            <option value="9">09:00</option>
+                            <option value="9.5">09:30</option>
+                            <option value="10">10:00</option>
+                            <option value="10.5">10:30</option>
+                            <option value="11">11:00</option>
+                            <option value="11.5">11:30</option>
+                            <option value="12">12:00</option>
+                            <option value="12.5">12:30</option>
+                            <option value="13">13:00</option>
+                            <option value="13.5">13:30</option>
+                            <option value="14">14:00</option>
+                            <option value="14.5">14:30</option>
+                            <option value="15">15:00</option>
+                            <option value="15.5">15:30</option>
+                            <option value="16">16:00</option>
+                            <option value="16.5">16:30</option>
+                            <option value="17">17:00</option>
+                            <option value="17.5">17:30</option>
+                            <option value="18">18:00</option>
+                            <option value="18.5">18:30</option>
+                            <option value="19">19:00</option>
+                            <option value="19.5">19:30</option>
+                            <option value="20">20:00</option>
+                            <option value="20.5">20:30</option>
+                            <option value="21">21:00</option>
+                            <option value="21.5">21:30</option>
+                            <option value="22">22:00</option>
+                            <option value="22.5">22:30</option>
+                            <option value="23">23:00</option>
+                            <option value="23.5">23:30</option>
+                        </select>
+                        <br>
+                        <br>------------------------------------------
+                        <br>
+                        <br>預約區間
+                        <br>
+                        <select name="bookingBlock">
+                            <option value="0.5">30分鐘</option>
+                            <option value="1">60分鐘</option>
+                            <option value="1.5">90分鐘</option>
+                            <option value="2">120分鐘</option>
+                        </select>
+                        <br>
+                        <br> ------------------------------------------
+                        <br>
+                        <br> 設定店休日期
+                        <br> 每月固定
+                        <input type="text" name='closeDateByMonth'><span style="font-size: 5px ;color: blue"> 多天請用逗號隔開 ex:5,15,30 (若無,請空白)</span>
+                        <br> 每週固定
+                        <select name="closeDateByWeek">
+                            <option value="0">無</option>
+                            <option value="1">星期一</option>
+                            <option value="2">星期二</option>
+                            <option value="3">星期三</option>
+                            <option value="4">星期四</option>
+                            <option value="5">星期五</option>
+                            <option value="6">星期六</option>
+                            <option value="7">星期日</option>
+                        </select>
+                        <br>
+                        <br> ------------------------------------------
+                        <br>
+                        <br> 接受幾天前開放預約
+                        <br>
+                        <select name="dayOfBook">
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                            <option value=6>6</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                            <option value=10>10</option>
+                            <option value=11>11</option>
+                            <option value=12>12</option>
+                            <option value=13>13</option>
+                            <option value=14>14</option>
+                            <option value=15>15</option>
+                            <option value=16>16</option>
+                            <option value=17>17</option>
+                            <option value=18>18</option>
+                            <option value=19>19</option>
+                            <option value=20>20</option>
+                            <option value=21>21</option>
+                            <option value=22>22</option>
+                            <option value=23>23</option>
+                            <option value=24>24</option>
+                            <option value=25>25</option>
+                            <option value=26>26</option>
+                            <option value=27>27</option>
+                            <option value=28>28</option>
+                            <option value=29>29</option>
+                            <option value=30>30</option>
+                        </select>天
+                        <br>
+                        <br> ------------------------------------------
+                        <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit">確認</button>
+                    </div>
+                </form>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 </body>
 
 </html>
