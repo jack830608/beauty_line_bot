@@ -10,10 +10,6 @@ module.exports = function(app) {
     store(app);
     admin(app);
 
-app.get('/test',function(req,res){
-    res.render('index.html')
-})
-
     app.get('*', function(req, res) {
         res.render('404.html', {
             title: '404',

@@ -7,7 +7,7 @@ let schema = new Schema({
     date: { type: String },
     startAt: { type: String },
     endAt: { type: String },
-    phone: { type: Number },
+    phone: { type: String },
     name: { type: String },
     note: { type: String },
     code: { type: String },

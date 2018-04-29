@@ -1,25 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <style>
-    .store {
-        display: inline-block;
-        width: 25%;
-        height: 100px;
-        border-width: 3px;
-        border-style: solid;
-        border-color: black;
-        padding: 10px;
-        font-family: 微軟正黑體
-    }
-    </style>
     <title>{{title}}</title>
     <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../css/simple-sidebar.css" rel="stylesheet">
+    <script src="../../node_modules/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -84,20 +73,19 @@
                     </select>
                     <br>
                     <br>
-                    <button type="submit">更新</button>
+                    <br>
+                    <span style="position:absolute;left:18.7%"><button type="submit">更新</button></span>
                 </form>
                 <form action="/store/delete/{{storeId}}" method="POST" style="color: black;display:inline" onSubmit="return CheckForm();">
-                    <button type="submit">刪除</button>
+                    <span style="position:absolute;left:15%"><button type="submit">刪除</button></span>
                 </form>
-                <span><button onclick="location.href='/store'">取消</button></span>
+                <span style="position:absolute;left:11.3%"><button onclick="location.href='/store'">取消</button></span>
                 <br>
                 <br>
                 <br>
             </div>
         </div>
     </div>
-    <script src="../../js/jquery.min.js"></script>
-    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();

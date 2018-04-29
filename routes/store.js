@@ -1,4 +1,4 @@
-var Store = require('../models/store')
+const Store = require('../models/store')
 const wrap = require('../lib/async-wrapper')
 module.exports = function(app) {
     app.get('/store', wrap(async(req, res, next) => {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,6 +19,8 @@
     <title>{{title}}</title>
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/simple-sidebar.css" rel="stylesheet">
+    <script src="node_modules/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -45,6 +48,7 @@
                     <br>
                     <h1 style="font-family: 微軟正黑體 ">門市管理</h1>
                     <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
+                    <br>
                     <button style="font-family: 微軟正黑體" onclick="location.href='/store/add'">新增分店</button>
                     <br>
                     <br> {% for store in stores %}
@@ -59,8 +63,6 @@
                 </div>
             </div>
         </div>
-        <script src="js/jquery.min.js"></script>
-        <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script>
         $("#menu-toggle").click(function(e) {
             e.preventDefault();

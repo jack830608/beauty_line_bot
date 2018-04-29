@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{title}}</title>
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/simple-sidebar.css" rel="stylesheet">
+    <script src="../node_modules/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -35,7 +38,8 @@
                 <br>
                 <form action="/store/add" method="POST" style="font-family: 微軟正黑體;display:inline ">
                     分店名稱：
-                    <input type="text" name="name">
+                    <input type="text" name="name" placeholder="分店名稱">
+                    <br>
                     <br> 同時段可接受名額數量 :
                     <select name="sameTimeBook">
                         <option value=1>1</option>
@@ -61,17 +65,16 @@
                     </select>
                     <br>
                     <br>
-                    <button type="submit">確認</button>
+                    <br>
+                    <span style="position:absolute;left:17%"><button type="submit">確認</button></span>
                 </form>
-                <span><button onclick="location.href='/store'">取消</button></span>
+                <span style="position:absolute;left:13.3%"><button onclick="location.href='/store'">取消</button></span>
                 <br>
                 <br>
                 <br>
             </div>
         </div>
     </div>
-    <script src="../js/jquery.min.js"></script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
