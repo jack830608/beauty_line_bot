@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{title}}</title>
+    <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/simple-sidebar.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/jquery-ui.min.css">
+    <script src="../../node_modules/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <script language="Javascript">
+    function CheckDelete() {
+        if (confirm("確認刪除此訂單？") == true)
+            return true;
+        else
+            return false;
+    }
+
+    function CheckCancel() {
+        if (confirm("確認取消預約？") == true)
+            return true;
+        else
+            return false;
+    }
+    </script>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                </li>
+                <li>
+                    <a href="/order">訂單管理</a>
+                </li>
+                <li>
+                    <a href="/store">門市管理</a>
+                </li>
+                <li>
+                    <a href="/init">初始化修改</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                <br>
+                <br>
+                <h1 style="display: inline">訂單明細</h1>
+                <br>
+                <div style="position:absolute;right:56%">狀態： {% if status == 1 %} <span style="color: red">取消</span> {% elif status == 0 %} <span style="color: black">已完成</span> {% else %} <span style="color: green">進行中</span> {% endif %}
+                </div>
+                <span style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ;position:absolute;right:0">{{infoMessages}}</span>
+                <br>------------------------------------------------------------------------------------
+                <br>
+                <div><span style="position:absolute;left:2.5%">日期：{{dataDetail.date.getFullYear()}}年{{dataDetail.date.getMonth()+1}}月{{dataDetail.date.getDate()}}日</span>
+                    <span style="position:absolute;left:16%">時段：{{dataDetail.startAt | int}}:{{(dataDetail.startAt - dataDetail.startAt | int)*6}}0 ~ {{dataDetail.endAt | int}}:{{(dataDetail.endAt - dataDetail.endAt | int)*6}}0</span></div>
+                <br>
+                <br>
+                <div>
+                    <span style="position:absolute;left:2.5%">電話：{{dataDetail.phone}} </span>
+                    <span style="position:absolute;left:16%">姓名：{{dataDetail.user.name}}</span>
+                    <span style="position:absolute;left:28.5%">預約驗證碼：{{dataDetail.code}}</span>
+                </div>
+                <br>
+                <br>
+                <div><span style="position:absolute;left:2.5%">備註：{{dataDetail.note}}</span> </div>
+                <br>
+                <br>------------------------------------------------------------------------------------
+                <br>
+                <br>
+                <div style="position:absolute;right:55%">
+                    {% if dataDetail.cancel == false and status !==0 %}
+                    <form action="/order/cancel/{{dataDetail._id}}" method="POST" style="color: black;display:inline" onSubmit="return CheckCancel();">
+                        <button type="submit">取消預約</button>
+                    </form> {% endif %}
+                    <form action="/order/delete/{{dataDetail._id}}" method="POST" style="color: black;display:inline" onSubmit="return CheckDelete();">
+                        <button type="submit">刪除訂單</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    </script>
+</body>
+
+</html>

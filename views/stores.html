@@ -36,7 +36,7 @@
                     <a href="/store">門市管理</a>
                 </li>
                 <li>
-                    <a href="/store/init">初始化修改</a>
+                    <a href="/init">初始化修改</a>
                 </li>
             </ul>
         </div>
@@ -47,15 +47,15 @@
                     <br>
                     <br>
                     <h1 style="font-family: 微軟正黑體 ">門市管理</h1>
-                    <div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{infoMessages}}</div>
+                    <span align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體;position:absolute;right:4%" ">{{infoMessages}}</span>
                     <br>
-                    <button style="font-family: 微軟正黑體" onclick="location.href='/store/add'">新增分店</button>
+                    <button style="font-family: 微軟正黑體 " onclick="location.href='/store/add' ">新增分店</button>
                     <br>
                     <br> {% for store in stores %}
-                    <div class="store">{{ store.name }} {{ store.sameTimeBook }} 人
+                    <div class="store ">{{ store.name }} {{ store.sameTimeBook }} 人
                         <br>
                         <br>
-                        <div align="right"><a href="/store/update/{{store._id}}">管理</a></div>
+                        <div align="right "><a href="/store/update/{{store._id}} ">管理</a></div>
                     </div>
                     {% endfor %}
                     <br>
@@ -64,9 +64,9 @@
             </div>
         </div>
         <script>
-        $("#menu-toggle").click(function(e) {
+        $("#menu-toggle ").click(function(e) {
             e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
+            $("#wrapper ").toggleClass("toggled ");
         });
         </script>
 </body>

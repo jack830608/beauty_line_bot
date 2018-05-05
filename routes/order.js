@@ -1,33 +1,43 @@
 const Order = require('../models/order')
 const wrap = require('../lib/async-wrapper')
-
+const crypto = require('crypto');
 module.exports = function(app) {
     app.get("/order", wrap(async(req, res, next) => {
-        let orderList = await Order.find({})
-        res.render('../views/order.html', {
-            orders: orderList,
-            infoMessages: req.flash('info'),
-            title: "訂單管理"
-        })
+
+        if (req.query.search_query) {
+            let findData = await Order.find({
+                $or: [{ name: req.query.search_query },
+                    { phone: req.query.search_query },
+                    { code: req.query.search_query }
+                ]
+            })
+            if (findData.length == 0) {
+                req.flash('info', '查無資料')
+                res.redirect('/order')
+            } else {
+                res.render('../views/order.html', { orders: findData, title: "訂單管理" })
+            }
+        } else {
+            let orderList = await Order.find({})
+            res.render('../views/order.html', {
+                orders: orderList,
+                infoMessages: req.flash('info'),
+                title: "訂單管理"
+            })
+        }
     }))
 
     app.post('/order', wrap(async(req, res, next) => {
-        let orderList = await Order.findOne({
-            date: req.body.date,
-            tartAt: req.body.startAt,
-            endAt: req.body.endtAt
-        })
-        // if (orderList) {
-        //     res.send('此時段有人預約')
-        // } else {
+        let randomString = crypto.randomBytes(32).toString('base64').substr(0, 6);
+        let data = req.body;
         Order.create({
             date: data.date,
             startAt: data.startAt,
             endAt: data.endAt,
             phone: data.phone,
-            name: data.name,
+            user: data.user,
             note: data.note,
-            code: data.code,
+            code: randomString,
             cancel: data.cancel
         });
         console.log('add new Order');
@@ -39,20 +49,32 @@ module.exports = function(app) {
     }))
 
     app.post('/orderbydate', wrap(async(req, res, next) => {
-        let dateFind = await Order.find({ date: req.body.date });
+        let start = new Date(req.body.date)
+        start.setHours(0, 0, 0, 0)
+        let end = new Date(req.body.date)
+        end.setHours(23, 59, 59, 999)
+        let dateFind = await Order.find({ date: { $lte: end, $gte: start } });
         if (dateFind.length == 0) {
             req.flash('info', '查無資料')
             res.redirect('/order')
         } else {
-            res.render('../views/order.html', { orders: dateFind })
+            res.render('../views/order.html', { orders: dateFind, title: "訂單管理" })
         }
     }))
 
     app.get('/order/details/:id', wrap(async(req, res, next) => {
-        let dataDetails = await Order.findOne({ _id: req.params.id });
-        if (dataDetails.cancel == false) {
-            status = "進行中"
-        } else { status = "取消" }
+        let dataDetails = await Order.findOne({ _id: req.params.id }).populate('user');
+        let thisDate = new Date(dataDetails.date).setHours(0, 0, 0, 0)
+        let today = new Date()
+        today.setHours(0, 0, 0, 0)
+        if (thisDate < today) {
+            status = 0 //已完成
+        } else {
+            if (dataDetails.cancel == false) {
+                status = 2 //進行中
+            } else { status = 1 } //取消
+        }
+
         res.render('../views/orderdetails.html', {
             title: "訂單明細",
             dataDetail: dataDetails,
@@ -70,8 +92,8 @@ module.exports = function(app) {
 
     app.post('/order/cancel/:id', wrap(async(req, res, next) => {
         let orderList = await Order.findOne({ _id: req.params.id })
-        let oldstatus = { cancel: orderList.cancel }
-        await Order.update(oldstatus, { cancel: true })
+        // let oldstatus = { cancel: orderList.cancel }
+        await Order.update({ cancel: orderList.cancel }, { cancel: true })
         console.log('Cancel success!');
         req.flash('info', '取消預約成功')
         res.redirect('back')
@@ -88,7 +110,8 @@ module.exports = function(app) {
             req.flash('info', '查無資料')
             res.redirect('/order')
         } else {
-            res.render('../views/order.html', { orders: findData })
+            res.render('../views/order.html', { orders: findData, title: "訂單管理" })
         }
     }))
+
 }

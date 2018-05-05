@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{title}}</title>
+    <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/simple-sidebar.css" rel="stylesheet">
+    <script src="../../node_modules/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                </li>
+                <li>
+                    <a href="/order">訂單管理</a>
+                </li>
+                <li>
+                    <a href="/store">門市管理</a>
+                </li>
+                <li>
+                    <a href="/init">初始化修改</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                <br>
+                <br>
+                <h1 style="font-family: 微軟正黑體">初始化修改</h1>
+                <span align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體;position:absolute;right:4% ">{{infoMessages}}</span>
+                <br>
+                <form action="/init" autocomplete='off' method="POST" style="font-family: 微軟正黑體 ;display:inline">
+                    <br> 設定店休日期
+                    <br> 每月固定
+                    <input type="text" name='closeDateByMonth' placeholder="ex:5,15,30" value={{init.closeDateByMonth}}><span style="font-size: 5px ;color: blue"> 多天請用逗號隔開 ; 若無,請空白</span>
+                    <br> 每週固定
+                    <select name="closeDateByWeek">
+                        <option value="{{init.closeDateByWeek}}">{{weeks}}</option>
+                        <option value="0">無</option>
+                        <option value="1">星期一</option>
+                        <option value="2">星期二</option>
+                        <option value="3">星期三</option>
+                        <option value="4">星期四</option>
+                        <option value="5">星期五</option>
+                        <option value="6">星期六</option>
+                        <option value="7">星期日</option>
+                    </select>
+                    <br>------------------------------------------
+                    <br> 接受幾天前開放預約
+                    <br>
+                    <select name="dayOfBook">
+                        <option value={{init.dayOfBook}}>{{init.dayOfBook}}</option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                        <option value=16>16</option>
+                        <option value=17>17</option>
+                        <option value=18>18</option>
+                        <option value=19>19</option>
+                        <option value=20>20</option>
+                        <option value=21>21</option>
+                        <option value=22>22</option>
+                        <option value=23>23</option>
+                        <option value=24>24</option>
+                        <option value=25>25</option>
+                        <option value=26>26</option>
+                        <option value=27>27</option>
+                        <option value=28>28</option>
+                        <option value=29>29</option>
+                        <option value=30>30</option>
+                    </select>天
+                    <br> ------------------------------------------
+            </div>
+        </div>
+    </div>
+    <span style="position:absolute;left:26.7%"><button type="submit">確認</button></span>
+    </form>
+    <br>
+    <br>
+    <br>
+    </div>
+    </div>
+    </div>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+</body>
+
+</html>

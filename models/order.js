@@ -4,11 +4,11 @@ const { Schema } = mongoose
 
 
 let schema = new Schema({
-    date: { type: String },
+    date: { type: Date },
     startAt: { type: String },
     endAt: { type: String },
     phone: { type: String },
-    name: { type: String },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     note: { type: String },
     code: { type: String },
     cancel: { type: Boolean, default: false },

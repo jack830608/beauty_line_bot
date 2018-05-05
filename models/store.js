@@ -8,9 +8,9 @@ let schema = new Schema({
     startAt: { type: String },
     endAt: { type: String },
     bookingBlock: { type: String },
-    closeDateByMonth: [],
-    closeDateByWeek: { type: String },
-    sameTimeBook: { type: Number },
-    dayOfBook: { type: Number },
+    // closeDateByMonth: [],
+    // closeDateByWeek: { type: String },
+    sameTimeBook: { type: Number }
+    // dayOfBook: { type: Number },
 }).plugin(plugin)
 module.exports = mongoose.model('Store', schema)
