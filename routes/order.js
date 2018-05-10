@@ -1,21 +1,29 @@
 const Order = require('../models/order')
+const User = require('../models/user')
 const wrap = require('../lib/async-wrapper')
 const crypto = require('crypto');
 module.exports = function(app) {
     app.get("/order", wrap(async(req, res, next) => {
 
         if (req.query.search_query) {
-            let findData = await Order.find({
-                $or: [{ name: req.query.search_query },
-                    { phone: req.query.search_query },
+            var findName = await User.find({ name: req.query.search_query })
+            var findData = await Order.find({
+                $or: [{ phone: req.query.search_query },
                     { code: req.query.search_query }
                 ]
             })
-            if (findData.length == 0) {
+            if (findName.length !== 0) {
+                var arr = []
+                for (i = 0; i < findName.length; i++) {
+                    var findData = await Order.find({ user: findName[i]._id })
+                    arr.push(findData[0])
+                }
+                res.render('../views/order.html', { orders: arr, title: "訂單管理" })
+            } else if (findData.length !== 0) {
+                res.render('../views/order.html', { orders: findData, title: "訂單管理" })
+            } else if (findData.length == 0 && findName.length == 0) {
                 req.flash('info', '查無資料')
                 res.redirect('/order')
-            } else {
-                res.render('../views/order.html', { orders: findData, title: "訂單管理" })
             }
         } else {
             let orderList = await Order.find({})
@@ -115,3 +123,5 @@ module.exports = function(app) {
     }))
 
 }
+
+// 新增協助預約

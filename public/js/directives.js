@@ -45,7 +45,7 @@ app.directive('myCalendar', function() {
                 [{ 'id': 8, 'name': '9月' }, { 'id': 9, 'name': '10月' }, { 'id': 10, 'name': '11月' }, { 'id': 11, 'name': '12月' }]
             ];
 
-            $scope.$on('loadEvents', function(e, data) { // 從後端拿到課程後
+            $scope.$on('loadEvents', function(e, data) { // 從後端拿到訂單後
                 $scope.events = data;
                 selectedYear = new Date().getFullYear(),
                     selectedMonth = new Date().getMonth(),
@@ -63,7 +63,6 @@ app.directive('myCalendar', function() {
                     $scope.displayMonthCalendar();
                     $scope.displayCompleteDate();
                 }
-
                 $scope.displayCompleteDate = function() {
                     var timeStamp = new Date(selectedYear, selectedMonth, selectedDate).getTime();
                     if (angular.isUndefined($scope.dateformat)) {
@@ -85,15 +84,15 @@ app.directive('myCalendar', function() {
                 }
 
                 // $scope.UIdisplayMonthtoYear = function() {
-                // 	$scope.UICalendarDisplay.Date = false;
-                // 	$scope.UICalendarDisplay.Month = false;
-                // 	$scope.UICalendarDisplay.Year = true;
+                //  $scope.UICalendarDisplay.Date = false;
+                //  $scope.UICalendarDisplay.Month = false;
+                //  $scope.UICalendarDisplay.Year = true;
                 // }
 
                 // $scope.UIdisplayYeartoMonth = function() {
-                // 	$scope.UICalendarDisplay.Date = false;
-                // 	$scope.UICalendarDisplay.Month = true;
-                // 	$scope.UICalendarDisplay.Year = false;
+                //  $scope.UICalendarDisplay.Date = false;
+                //  $scope.UICalendarDisplay.Month = true;
+                //  $scope.UICalendarDisplay.Year = false;
                 // }
 
                 $scope.UIdisplayMonthtoDate = function() {
@@ -142,23 +141,23 @@ app.directive('myCalendar', function() {
                 }
 
                 // $scope.selectedDecadePrevClick = function() { 
-                // 	selectedYear -= 10; 
-                // 	$scope.displayMonthCalendar(); 
+                //  selectedYear -= 10; 
+                //  $scope.displayMonthCalendar(); 
                 // }
 
                 // $scope.selectedDecadeNextClick = function() { 
-                // 	selectedYear += 10; 
-                // 	$scope.displayMonthCalendar();
+                //  selectedYear += 10; 
+                //  $scope.displayMonthCalendar();
                 // }
 
                 // $scope.selectedYearClick = function(year) {
-                // 	$scope.displayYear = year;
-                // 	selectedYear = year;
-                // 	$scope.displayMonthCalendar();
-                // 	$scope.UICalendarDisplay.Date = false;
-                // 	$scope.UICalendarDisplay.Month = true;
-                // 	$scope.UICalendarDisplay.Year = false;
-                // 	$scope.displayCompleteDate();
+                //  $scope.displayYear = year;
+                //  selectedYear = year;
+                //  $scope.displayMonthCalendar();
+                //  $scope.UICalendarDisplay.Date = false;
+                //  $scope.UICalendarDisplay.Month = true;
+                //  $scope.UICalendarDisplay.Year = false;
+                //  $scope.displayCompleteDate();
                 // }
 
                 $scope.selectedMonthClick = function(month) {
@@ -249,53 +248,99 @@ app.directive('myCalendar', function() {
                             currentMonthEvents.push(e)
                         }
                     })
+                    $scope.$on('initList', function(e, init) { //從後端拿到初始化設定資料
+                        var closeDateByMonth = init.closeDateByMonth
+                        var closeDateByWeek = init.closeDateByWeek
+                        var dayOfBook = init.dayOfBook
+                        var closeByMonth = closeDateByMonth.split(',').map(function(item) {
+                            return parseInt(item, 10); //將Srting轉成Array
+                        });
 
-                    for (var i = 0; i < 6; i++) { // 開始畫日期，共畫6週
-                        if (typeof $scope.datesDisp[0][6] === 'undefined') { // 如果目前 datesDisp 第一個陣列沒完成 // 第一週
-                            for (var j = 0; j < 7; j++) {
-                                if (j < startDay) {
-                                    $scope.datesDisp[i][j] = { "type": "oldMonth", "date": (prevMonthLastDates - startDay + 1) + j };
-                                } else { // 畫第一週
-                                    $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
-                                    _.map(currentMonthEvents, function(e) {
-                                        // 當月所有的訂單
-                                        // 如果日期對應上的話，要讓頁面顯示當天有預約
-                                        var stD = new Date(e.date)
-                                        var seD = new Date(selectedYear, selectedMonth, countDatingStart)
-                                        var diff = dateDiffInDays(stD, seD)
-                                        if (diff == 0 && !e.frequency) { // 臨時課程
-                                            console.log('have a tempCourse' + countDatingStart);
-                                            $scope.datesDisp[i][j]["e"] = true;
-                                        }
-                                    });
-                                    countDatingStart++;
+                        for (var i = 0; i < 6; i++) { // 開始畫日期，共畫6週
+                            if (typeof $scope.datesDisp[0][6] === 'undefined') { // 如果目前 datesDisp 第一個陣列沒完成 // 第一週
+                                for (var j = 0; j < 7; j++) {
+                                    if (j < startDay) {
+                                        $scope.datesDisp[i][j] = { "type": "oldMonth", "date": (prevMonthLastDates - startDay + 1) + j };
+                                    } else { // 畫第一週
+                                        if (countDatingStart < new Date().getDate()) { //今天以前的日期全部反灰
+                                            $scope.datesDisp[i][j] = { "type": "today", "date": countDatingStart };
+                                        } else if (j == closeDateByWeek) { //每週固定店休
+                                            console.log('store close every week ' + closeDateByWeek)
+                                            $scope.datesDisp[i][j] = { "type": "closeWeek", "date": countDatingStart };
+                                        } else if (closeByMonth.indexOf(countDatingStart) >= 0) { //每月固定店休
+                                            console.log('store close every month ' + closeByMonth)
+                                            $scope.datesDisp[i][j] = { "type": "closeMonth", "date": countDatingStart }
+                                        } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
+                                            console.log('dayOfBook is '+dayOfBook)
+                                            $scope.datesDisp[i][j] = { "type": "dayOfBook", "date": countDatingStart };
+                                        } else {
+                                            $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
+                                            _.map(currentMonthEvents, function(e) {
+                                                // 當月所有的訂單
+                                                // 如果日期對應上的話，要讓頁面顯示當天有預約
+                                                var stD = new Date(e.date)
+                                                var seD = new Date(selectedYear, selectedMonth, countDatingStart)
+                                                var diff = dateDiffInDays(stD, seD)
+                                                if (diff == 0 && !e.frequency) { // 臨時課程
+                                                    console.log('have a order  ' + countDatingStart);
+                                                    if (countDatingStart - new Date().getDate() > 3) {
+                                                        $scope.datesDisp[i][j]["e"] = true;
+                                                    } else {
+                                                        $scope.datesDisp[i][j]["e"] = false
+                                                    }
+                                                }
+                                            })
+                                        };
+                                        countDatingStart++;
+                                    }
                                 }
-                            }
-                        } else {
-                            for (var k = 0; k < 7; k++) {
-                                if (countDatingStart <= endingDateLimit) {
-                                    $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart };
-                                    _.map(currentMonthEvents, function(e) { // 尋找當月課程是否與當前同天，有的話則紀錄當天有 event
-                                        var stD = new Date(e.date)
-                                        var seD = new Date(selectedYear, selectedMonth, countDatingStart)
-                                        var diff = dateDiffInDays(stD, seD)
-                                        if (diff == 0 && !e.frequency) { // 臨時課程
-                                            console.log('have a tempCourse' + countDatingStart);
-                                            $scope.datesDisp[i][k]["e"] = true;
-                                        }
-                                    });
-                                    countDatingStart++;
-                                } else {
-                                    $scope.datesDisp[i][k] = { "type": "newMonth", "date": nextMonthdates++ };
+                            } else {
+                                for (var k = 0; k < 7; k++) {
+                                    if (countDatingStart <= endingDateLimit) {
+                                        if (countDatingStart < new Date().getDate()) { //今天以前的日期全部反灰
+                                            $scope.datesDisp[i][k] = { "type": "today", "date": countDatingStart };
+                                        } else if (k == closeDateByWeek) { //每週固定店休
+                                            console.log('store close every week ' + closeDateByWeek)
+                                            $scope.datesDisp[i][k] = { "type": "closeWeek", "date": countDatingStart };
+                                        } else if (closeByMonth.indexOf(countDatingStart) >= 0) { //每月固定店休
+                                            console.log('store close every month ' + closeByMonth)
+                                            $scope.datesDisp[i][k] = { "type": "closeMonth", "date": countDatingStart }
+                                        } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
+                                            console.log('dayOfBook is '+dayOfBook)
+                                            $scope.datesDisp[i][k] = { "type": "dayOfBook", "date": countDatingStart };
+                                        } else {
+                                            $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart };
+                                            _.map(currentMonthEvents, function(e) { // 尋找當月課程是否與當前同天，有的話則紀錄當天有 event
+                                                var stD = new Date(e.date)
+                                                var seD = new Date(selectedYear, selectedMonth, countDatingStart)
+                                                var diff = dateDiffInDays(stD, seD)
+                                                if (diff == 0 && !e.frequency) { // 臨時課程
+                                                    console.log('have a order ' + countDatingStart);
+                                                    if (countDatingStart - new Date().getDate() > 3) {
+                                                        $scope.datesDisp[i][k]["e"] = true
+                                                    } else {
+                                                        $scope.datesDisp[i][k]["e"] = false
+                                                    }
+
+                                                }
+                                            })
+                                        };
+                                        countDatingStart++;
+                                    } else {
+                                        $scope.datesDisp[i][k] = { "type": "newMonth", "date": nextMonthdates++ };
+
+                                    }
                                 }
+
                             }
                         }
-                    }
+                    })
                 }
+                //  1.判斷預約日期是否為三天內,若為三天內則顯示紅色點且無法取消預約,若不在三天內則顯示藍色點且可以取消預約
+                //  2.找出資料庫內幾天前開放預約&店休日期,其他日期屏蔽掉
                 // ====================================================================
                 $scope.displayMonthCalendar();
             });
-
         }],
         template: '<style>' +
             '.ionic_Calendar .calendar_Date .row.Daysheading {text-align:center;}' +
@@ -315,43 +360,43 @@ app.directive('myCalendar', function() {
             '.ionic_Calendar .Daysheading_Label .col { padding-bottom: 0px !important;}' +
             '</style>' +
             '<div class="ionic_Calendar">' +
-            '	<div class="calendar_Date" ng-show="UICalendarDisplay.Date">' +
-            '		<div class="row" style=" background-color: #3F3F3F;  color: white;">'
-            // +'		  <div class="col txtCenter" ><i class="icon ion-chevron-left" ng-click="selectedMonthPrevClick()"></i></div>'
+            '   <div class="calendar_Date" ng-show="UICalendarDisplay.Date">' +
+            '       <div class="row" style=" background-color: #3F3F3F;  color: white;">'
+            // +'         <div class="col txtCenter" ><i class="icon ion-chevron-left" ng-click="selectedMonthPrevClick()"></i></div>'
             +
-            '		  <div class="col txtCenter"></div>' +
-            '		  <div class="col col-75 txtCenter" ng-click="UIdisplayDatetoMonth()">{{displayYear}}年{{dislayMonth}}月</div>'
-            // +'		  <div class="col txtCenter"><i class="icon ion-chevron-right"  ng-click="selectedMonthNextClick()"></i></div>'
+            '         <div class="col txtCenter"></div>' +
+            '         <div class="col col-75 txtCenter" ng-click="UIdisplayDatetoMonth()">{{displayYear}}年{{dislayMonth}}月</div>'
+            // +'         <div class="col txtCenter"><i class="icon ion-chevron-right"  ng-click="selectedMonthNextClick()"></i></div>'
             +
-            '		  <div class="col txtCenter" ng-click="returnToday()">今日</div>' +
-            '		</div>' +
-            '		<div class="row Daysheading Daysheading_Label" style="background-color: #383737; color: white;">' +
-            '		  <div class="col">日</div><div class="col">一</div><div class="col">二</div><div class="col">三</div><div class="col">四</div><div class="col">五</div><div class="col">六</div>' +
-            '		</div>' +
-            '		<div ng-swipe-left="selectedMonthNextClick()" ng-swipe-right="selectedMonthPrevClick()" on-swipe-left="selectedMonthNextClick()" on-swipe-right="selectedMonthPrevClick()" class="row Daysheading DaysDisplay" ng-repeat = "rowVal in datesDisp  track by $index" ng-class="{\'marginTop0\':$first}">' +
-            '		  <div class="col date" ng-repeat = "colVal in rowVal  track by $index" ng-class="{\'fadeDateDisp\':(colVal.type == \'oldMonth\' || colVal.type == \'newMonth\'), \'haveEvent\':(colVal.e) ,\'selDate\':(colVal.date == displayDate && colVal.type == \'currentMonth\')}"  ng-click="selectedDateClick(colVal)" >{{colVal.date}}</div> ' +
-            '		</div>' +
-            '	</div>' +
-            '	<div class="calendar_Month" ng-show="UICalendarDisplay.Month">' +
-            '		<div class="row" style=" background-color: #3F3F3F;  color: white;">' +
-            '		  <div class="col txtCenter"><i class="icon ion-chevron-left" ng-click="selectedMonthYearPrevClick()"></i></div>' +
-            '		  <div class="col col-75 txtCenter" ng-click="UIdisplayMonthtoYear()">{{displayYear}}</div>' +
-            '		  <div class="col txtCenter"><i class="icon ion-chevron-right" ng-click="selectedMonthYearNextClick()"></i></div>' +
-            '		</div>' +
-            '		<div class="row txtCenter MonthsDisplay" ng-repeat = "rowVal in calMonths  track by $index" ng-class="{\'marginTop0\':$first}">' +
-            '		  <div class="col" ng-repeat = "colVal in rowVal  track by $index"  ng-class="(colVal.name == shortMonth) ? \'selMonth\' : \'NonSelMonth\'"  ng-click="selectedMonthClick(colVal.id)" >{{colVal.name}}</div>' +
-            '		</div>' +
-            '	</div>' +
-            '	<div class="calendar_Year" ng-show="UICalendarDisplay.Year">' +
-            '		<div class="row" style=" background-color: #3F3F3F;  color: white;">' +
-            '		  <div class="col txtCenter"><i class="icon ion-chevron-left" ng-click="selectedDecadePrevClick()"></i></div>' +
-            '		  <div class="col col-75 txtCenter">{{startYearDisp+1}}-{{endYearDisp-1}}</div>' +
-            '		  <div class="col txtCenter"><i class="icon ion-chevron-right" ng-click="selectedDecadeNextClick()"></i></div>' +
-            '		</div>' +
-            '		<div class="row txtCenter YearsDisplay" ng-repeat = "nx in []| rangecal:3" ng-class="{\'marginTop0\':$first}">' +
-            '		  <div class="col" ng-repeat="n in [] | rangecal:4"  ng-class="{ \'fadeYear\': (((startYearDisp+nx+nx+nx+nx+n) == startYearDisp)||((startYearDisp+nx+nx+nx+nx+n) == endYearDisp)), \'selYear\': ((startYearDisp+nx+nx+nx+nx+n) == displayYear) }" ng-click="selectedYearClick((startYearDisp+nx+nx+nx+nx+n))">{{startYearDisp+nx+nx+nx+nx+n}}</div>' +
-            '		</div>' +
-            '	</div>' +
+            '         <div class="col txtCenter" ng-click="returnToday()">今日</div>' +
+            '       </div>' +
+            '       <div class="row Daysheading Daysheading_Label" style="background-color: #383737; color: white;">' +
+            '         <div class="col">日</div><div class="col">一</div><div class="col">二</div><div class="col">三</div><div class="col">四</div><div class="col">五</div><div class="col">六</div>' +
+            '       </div>' +
+            '       <div ng-swipe-left="selectedMonthNextClick()" ng-swipe-right="selectedMonthPrevClick()" on-swipe-left="selectedMonthNextClick()" on-swipe-right="selectedMonthPrevClick()" class="row Daysheading DaysDisplay" ng-repeat = "rowVal in datesDisp  track by $index" ng-class="{\'marginTop0\':$first}">' +
+            '         <div class="col date" ng-repeat = "colVal in rowVal  track by $index" ng-class="{\'fadeDateDisp\':(colVal.type == \'oldMonth\' || colVal.type == \'newMonth\'|| colVal.type == \'today\'|| colVal.type == \'closeWeek\'|| colVal.type == \'dayOfBook\'|| colVal.type == \'closeMonth\'), \'haveEventBlue\':(colVal.e) ,\'haveEventRed\':(colVal.e==false) ,\'selDate\':(colVal.date == displayDate && colVal.type == \'currentMonth\')}"  ng-click="selectedDateClick(colVal)" >{{colVal.date}}</div> ' +
+            '       </div>' +
+            '   </div>' +
+            '   <div class="calendar_Month" ng-show="UICalendarDisplay.Month">' +
+            '       <div class="row" style=" background-color: #3F3F3F;  color: white;">' +
+            '         <div class="col txtCenter"><i class="icon ion-chevron-left" ng-click="selectedMonthYearPrevClick()"></i></div>' +
+            '         <div class="col col-75 txtCenter" ng-click="UIdisplayMonthtoYear()">{{displayYear}}</div>' +
+            '         <div class="col txtCenter"><i class="icon ion-chevron-right" ng-click="selectedMonthYearNextClick()"></i></div>' +
+            '       </div>' +
+            '       <div class="row txtCenter MonthsDisplay" ng-repeat = "rowVal in calMonths  track by $index" ng-class="{\'marginTop0\':$first}">' +
+            '         <div class="col" ng-repeat = "colVal in rowVal  track by $index"  ng-class="(colVal.name == shortMonth) ? \'selMonth\' : \'NonSelMonth\'"  ng-click="selectedMonthClick(colVal.id)" >{{colVal.name}}</div>' +
+            '       </div>' +
+            '   </div>' +
+            '   <div class="calendar_Year" ng-show="UICalendarDisplay.Year">' +
+            '       <div class="row" style=" background-color: #3F3F3F;  color: white;">' +
+            '         <div class="col txtCenter"><i class="icon ion-chevron-left" ng-click="selectedDecadePrevClick()"></i></div>' +
+            '         <div class="col col-75 txtCenter">{{startYearDisp+1}}-{{endYearDisp-1}}</div>' +
+            '         <div class="col txtCenter"><i class="icon ion-chevron-right" ng-click="selectedDecadeNextClick()"></i></div>' +
+            '       </div>' +
+            '       <div class="row txtCenter YearsDisplay" ng-repeat = "nx in []| rangecal:3" ng-class="{\'marginTop0\':$first}">' +
+            '         <div class="col" ng-repeat="n in [] | rangecal:4"  ng-class="{ \'fadeYear\': (((startYearDisp+nx+nx+nx+nx+n) == startYearDisp)||((startYearDisp+nx+nx+nx+nx+n) == endYearDisp)), \'selYear\': ((startYearDisp+nx+nx+nx+nx+n) == displayYear) }" ng-click="selectedYearClick((startYearDisp+nx+nx+nx+nx+n))">{{startYearDisp+nx+nx+nx+nx+n}}</div>' +
+            '       </div>' +
+            '   </div>' +
             '</div>'
     };
 });

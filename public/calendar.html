@@ -19,7 +19,7 @@ div.list.courses a.item {
 }
 
 
-.ionic_Calendar .haveEvent::after {
+.ionic_Calendar .haveEventBlue::after {
     content: '';
     display: block;
     width: 4px;
@@ -28,6 +28,18 @@ div.list.courses a.item {
     -webkit-border-radius: 100%;
     border-radius: 100%;
     background-color: #69b6d5;
+    margin-right: auto;
+    margin-left: auto;
+}
+.ionic_Calendar .haveEventRed::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    background-color:red;
     margin-right: auto;
     margin-left: auto;
 }
@@ -115,6 +127,6 @@ div.list.courses a.item {
         <p></p>
 <!--         <i class="icon ion-chevron-right icon-accessory pull-right" style="font-size: 20px; color: #999"></i> -->
     </a>
-        <a class="item text-center" ng-hide="clickDateCourses.length" style="color: gray; font-size: 14px">無課程</a>
+<!--         <a class="item text-center" ng-hide="clickDateCourses.length" style="color: gray; font-size: 14px">無課程</a> -->
     </div>
 </div>

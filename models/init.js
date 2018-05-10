@@ -4,7 +4,7 @@ const { Schema } = mongoose
 
 
 let schema = new Schema({
-    closeDateByMonth: [],
+    closeDateByMonth: { type: String },
     closeDateByWeek: { type: String },
     dayOfBook: { type: Number },
 }).plugin(plugin)
