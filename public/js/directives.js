@@ -51,214 +51,216 @@ app.directive('myCalendar', function() {
                     selectedMonth = new Date().getMonth(),
                     selectedDate = new Date().getDate();
 
-                $scope.UICalendarDisplay = {};
-                $scope.UICalendarDisplay.Date = true;
-                $scope.UICalendarDisplay.Month = false;
-                $scope.UICalendarDisplay.Year = false;
 
-                $scope.returnToday = function() {
-                    selectedYear = new Date().getFullYear(),
+                $scope.$on('initList', function(e, init) { //從後端拿到初始化設定資料
+                    var closeDateByMonth = init.closeDateByMonth
+                    var closeDateByWeek = init.closeDateByWeek
+                    var dayOfBook = init.dayOfBook
+                    var closeByMonth = closeDateByMonth.split(',').map(function(item) {
+                        return parseInt(item, 10); //將Srting轉成Array
+                    });
+
+                    $scope.UICalendarDisplay = {};
+                    $scope.UICalendarDisplay.Date = true;
+                    $scope.UICalendarDisplay.Month = false;
+                    $scope.UICalendarDisplay.Year = false;
+
+                    $scope.returnToday = function() {
+                        selectedYear = new Date().getFullYear(),
                         selectedMonth = new Date().getMonth(),
                         selectedDate = new Date().getDate();
-                    $scope.displayMonthCalendar();
-                    $scope.displayCompleteDate();
-                }
-                $scope.displayCompleteDate = function() {
-                    var timeStamp = new Date(selectedYear, selectedMonth, selectedDate).getTime();
-                    if (angular.isUndefined($scope.dateformat)) {
-                        var format = "dd - MMM - yy";
-                    } else {
-                        var format = $scope.dateformat;
-                    }
-                    $scope.display = $filter('date')(timeStamp, format);
-                    $scope.$emit('dateClick', $scope.display);
-                }
-
-                //Onload Display Current Date
-                $scope.displayCompleteDate();
-
-                $scope.UIdisplayDatetoMonth = function() {
-                    $scope.UICalendarDisplay.Date = false;
-                    $scope.UICalendarDisplay.Month = true;
-                    $scope.UICalendarDisplay.Year = false;
-                }
-
-                // $scope.UIdisplayMonthtoYear = function() {
-                //  $scope.UICalendarDisplay.Date = false;
-                //  $scope.UICalendarDisplay.Month = false;
-                //  $scope.UICalendarDisplay.Year = true;
-                // }
-
-                // $scope.UIdisplayYeartoMonth = function() {
-                //  $scope.UICalendarDisplay.Date = false;
-                //  $scope.UICalendarDisplay.Month = true;
-                //  $scope.UICalendarDisplay.Year = false;
-                // }
-
-                $scope.UIdisplayMonthtoDate = function() {
-                    $scope.UICalendarDisplay.Date = true;
-                    $scope.UICalendarDisplay.Month = false;
-                    $scope.UICalendarDisplay.Year = false;
-                }
-
-                /**
-                 * 當往右滑動會觸發的 function
-                 */
-                $scope.selectedMonthPrevClick = function() {
-                    // selectedDate = 1;
-                    if (selectedMonth == 0) {
-                        selectedMonth = 11;
-                        selectedYear--;
-                    } else {
-                        $scope.dislayMonth = selectedMonth--;
-                    }
-                    $scope.displayMonthCalendar();
-                    $scope.displayCompleteDate();
-                }
-
-                $scope.selectedMonthNextClick = function() {
-                    // selectedDate = 1;
-                    if (selectedMonth == 11) {
-                        selectedMonth = 0;
-                        selectedYear++;
-                    } else {
-                        $scope.dislayMonth = selectedMonth++;
-                    }
-                    $scope.displayMonthCalendar();
-                    $scope.displayCompleteDate();
-                }
-
-                $scope.selectedMonthYearPrevClick = function() {
-                    selectedYear--;
-                    $scope.displayYear = selectedYear;
-                    $scope.displayMonthCalendar();
-                }
-
-                $scope.selectedMonthYearNextClick = function() {
-                    selectedYear++;
-                    $scope.displayYear = selectedYear;
-                    $scope.displayMonthCalendar();
-                }
-
-                // $scope.selectedDecadePrevClick = function() { 
-                //  selectedYear -= 10; 
-                //  $scope.displayMonthCalendar(); 
-                // }
-
-                // $scope.selectedDecadeNextClick = function() { 
-                //  selectedYear += 10; 
-                //  $scope.displayMonthCalendar();
-                // }
-
-                // $scope.selectedYearClick = function(year) {
-                //  $scope.displayYear = year;
-                //  selectedYear = year;
-                //  $scope.displayMonthCalendar();
-                //  $scope.UICalendarDisplay.Date = false;
-                //  $scope.UICalendarDisplay.Month = true;
-                //  $scope.UICalendarDisplay.Year = false;
-                //  $scope.displayCompleteDate();
-                // }
-
-                $scope.selectedMonthClick = function(month) {
-                    $scope.dislayMonth = month;
-                    selectedMonth = month;
-                    $scope.displayMonthCalendar();
-                    $scope.UICalendarDisplay.Date = true;
-                    $scope.UICalendarDisplay.Month = false;
-                    $scope.UICalendarDisplay.Year = false;
-                    $scope.displayCompleteDate();
-                }
-
-                $scope.selectedDateClick = function(date) {
-                    $scope.displayDate = date.date;
-                    selectedDate = date.date;
-
-                    if (date.type == 'newMonth') {
-                        var mnthDate = new Date(selectedYear, selectedMonth, 32)
-                        selectedMonth = mnthDate.getMonth();
-                        selectedYear = mnthDate.getFullYear();
                         $scope.displayMonthCalendar();
-                    } else if (date.type == 'oldMonth') {
-                        var mnthDate = new Date(selectedYear, selectedMonth, 0);
-                        selectedMonth = mnthDate.getMonth();
-                        selectedYear = mnthDate.getFullYear();
-                        $scope.displayMonthCalendar();
+                        $scope.displayCompleteDate();
                     }
-                    $scope.displayCompleteDate();
-                }
-
-                /**
-                 * draw calendar =================================================
-                 */
-                $scope.displayMonthCalendar = function() {
-
-                    /*Year Display Start*/
-                    $scope.startYearDisp = (Math.floor(selectedYear / 10) * 10) - 1;
-                    $scope.endYearDisp = (Math.floor(selectedYear / 10) * 10) + 10;
-                    /*Year Display End*/
-
-
-                    $scope.datesDisp = [
-                        [],
-                        [],
-                        [],
-                        [],
-                        [],
-                        []
-                    ];
-                    var countDatingStart = 1;
-                    var endingDateLimit;
-
-                    if (calMonths[selectedMonth] === 'February') {
-                        if (selectedYear % 4 === 0) {
-                            endingDateLimit = 29;
+                    $scope.displayCompleteDate = function() {
+                        var timeStamp = new Date(selectedYear, selectedMonth, selectedDate).getTime();
+                        if (angular.isUndefined($scope.dateformat)) {
+                            var format = "dd - MMM - yy";
                         } else {
-                            endingDateLimit = 28;
+                            var format = $scope.dateformat;
                         }
-                    } else {
-                        endingDateLimit = calDaysForMonth[selectedMonth];
+                        $scope.display = $filter('date')(timeStamp, format);
+                        $scope.$emit('dateClick', $scope.display);
                     }
-                    var startDay = new Date(selectedYear, selectedMonth, 1).getDay();
 
-                    $scope.displayYear = selectedYear;
-                    $scope.dislayMonth = calMonths[selectedMonth];
-                    $scope.shortMonth = calMonths[selectedMonth].slice(0, 3);
+                    //Onload Display Current Date
+                    $scope.displayCompleteDate();
 
-                    $scope.displayDate = selectedDate;
+                    $scope.UIdisplayDatetoMonth = function() {
+                        $scope.UICalendarDisplay.Date = false;
+                        $scope.UICalendarDisplay.Month = true;
+                        $scope.UICalendarDisplay.Year = false;
+                    }
 
-                    var nextMonthdates = 1;
-                    var prevMonthLastDates = new Date(selectedYear, selectedMonth, 0).getDate();
+                    // $scope.UIdisplayMonthtoYear = function() {
+                    //  $scope.UICalendarDisplay.Date = false;
+                    //  $scope.UICalendarDisplay.Month = false;
+                    //  $scope.UICalendarDisplay.Year = true;
+                    // }
 
-                    // selectedMonth 要特別注意，+1 才是真正的月份，而使用 new Date 他本身就會幫你加1
-                    // 過濾本月要顯示的課程
-                    var currentMonthEvents = []
-                    _.map($scope.events, function(e) {
-                        var sD = new Date(e.date)
-                        sD = new Date(sD.getFullYear(), sD.getMonth(), 1)
-                        sD.setHours(0, 0, 0, 0)
-                        var eD = new Date(selectedYear, selectedMonth, 30).setHours(23, 59, 59, 999)
-                        if (e.endDate) {
-                            eD = new Date(e.endDate)
-                            eD = new Date(eD.getFullYear(), eD.getMonth(), 30)
-                            eD.setHours(23, 59, 59, 999)
+                    // $scope.UIdisplayYeartoMonth = function() {
+                    //  $scope.UICalendarDisplay.Date = false;
+                    //  $scope.UICalendarDisplay.Month = true;
+                    //  $scope.UICalendarDisplay.Year = false;
+                    // }
+
+                    $scope.UIdisplayMonthtoDate = function() {
+                        $scope.UICalendarDisplay.Date = true;
+                        $scope.UICalendarDisplay.Month = false;
+                        $scope.UICalendarDisplay.Year = false;
+                    }
+
+                    /**
+                     * 當往右滑動會觸發的 function
+                     */
+                    $scope.selectedMonthPrevClick = function() {
+                        // selectedDate = 1;
+                        if (selectedMonth == 0) {
+                            selectedMonth = 11;
+                            selectedYear--;
+                        } else {
+                            $scope.dislayMonth = selectedMonth--;
                         }
-                        var selectD = new Date(selectedYear, selectedMonth, 1).setHours(0, 0, 0, 0)
-                        if (selectD >= sD && selectD <= eD) { // 如果所選年月 >= 開始年月則要顯示 && 如有停課日期，則所選年月 <= 停課年月則要顯示
-                            currentMonthEvents.push(e)
+                        $scope.displayMonthCalendar();
+                        $scope.displayCompleteDate();
+                    }
+
+                    $scope.selectedMonthNextClick = function() {
+                        // selectedDate = 1;
+                        if (selectedMonth == 11) {
+                            selectedMonth = 0;
+                            selectedYear++;
+                        } else {
+                            $scope.dislayMonth = selectedMonth++;
                         }
-                    })
-                    $scope.$on('initList', function(e, init) { //從後端拿到初始化設定資料
-                        var closeDateByMonth = init.closeDateByMonth
-                        var closeDateByWeek = init.closeDateByWeek
-                        var dayOfBook = init.dayOfBook
-                        var closeByMonth = closeDateByMonth.split(',').map(function(item) {
-                            return parseInt(item, 10); //將Srting轉成Array
-                        });
+                        $scope.displayMonthCalendar();
+                        $scope.displayCompleteDate();
+                    }
+
+                    $scope.selectedMonthYearPrevClick = function() {
+                        selectedYear--;
+                        $scope.displayYear = selectedYear;
+                        $scope.displayMonthCalendar();
+                    }
+
+                    $scope.selectedMonthYearNextClick = function() {
+                        selectedYear++;
+                        $scope.displayYear = selectedYear;
+                        $scope.displayMonthCalendar();
+                    }
+
+                    // $scope.selectedDecadePrevClick = function() { 
+                    //  selectedYear -= 10; 
+                    //  $scope.displayMonthCalendar(); 
+                    // }
+
+                    // $scope.selectedDecadeNextClick = function() { 
+                    //  selectedYear += 10; 
+                    //  $scope.displayMonthCalendar();
+                    // }
+
+                    // $scope.selectedYearClick = function(year) {
+                    //  $scope.displayYear = year;
+                    //  selectedYear = year;
+                    //  $scope.displayMonthCalendar();
+                    //  $scope.UICalendarDisplay.Date = false;
+                    //  $scope.UICalendarDisplay.Month = true;
+                    //  $scope.UICalendarDisplay.Year = false;
+                    //  $scope.displayCompleteDate();
+                    // }
+
+                    $scope.selectedMonthClick = function(month) {
+                        $scope.dislayMonth = month;
+                        selectedMonth = month;
+                        $scope.displayMonthCalendar();
+                        $scope.UICalendarDisplay.Date = true;
+                        $scope.UICalendarDisplay.Month = false;
+                        $scope.UICalendarDisplay.Year = false;
+                        $scope.displayCompleteDate();
+                    }
+
+                    $scope.selectedDateClick = function(date) {
+                        $scope.displayDate = date.date;
+                        selectedDate = date.date;
+
+                        if (date.type == 'newMonth') {
+                            var mnthDate = new Date(selectedYear, selectedMonth, 32)
+                            selectedMonth = mnthDate.getMonth();
+                            selectedYear = mnthDate.getFullYear();
+                            $scope.displayMonthCalendar();
+                        } else if (date.type == 'oldMonth') {
+                            var mnthDate = new Date(selectedYear, selectedMonth, 0);
+                            selectedMonth = mnthDate.getMonth();
+                            selectedYear = mnthDate.getFullYear();
+                            $scope.displayMonthCalendar();
+                        }
+                        $scope.displayCompleteDate();
+                    }
+
+                    /**
+                     * draw calendar =================================================
+                     */
+                    $scope.displayMonthCalendar = function() {
+                        /*Year Display Start*/
+                        $scope.startYearDisp = (Math.floor(selectedYear / 10) * 10) - 1;
+                        $scope.endYearDisp = (Math.floor(selectedYear / 10) * 10) + 10;
+                        /*Year Display End*/
+
+
+                        $scope.datesDisp = [
+                            [],
+                            [],
+                            [],
+                            [],
+                            [],
+                            []
+                        ];
+                        var countDatingStart = 1;
+                        var endingDateLimit;
+
+                        if (calMonths[selectedMonth] === 'February') {
+                            if (selectedYear % 4 === 0) {
+                                endingDateLimit = 29;
+                            } else {
+                                endingDateLimit = 28;
+                            }
+                        } else {
+                            endingDateLimit = calDaysForMonth[selectedMonth];
+                        }
+                        var startDay = new Date(selectedYear, selectedMonth, 1).getDay();
+
+                        $scope.displayYear = selectedYear;
+                        $scope.dislayMonth = calMonths[selectedMonth];
+                        $scope.shortMonth = calMonths[selectedMonth].slice(0, 3);
+
+                        $scope.displayDate = selectedDate;
+
+                        var nextMonthdates = 1;
+                        var prevMonthLastDates = new Date(selectedYear, selectedMonth, 0).getDate();
+
+                        // selectedMonth 要特別注意，+1 才是真正的月份，而使用 new Date 他本身就會幫你加1
+                        // 過濾本月要顯示的課程
+                        var currentMonthEvents = []
+                        _.map($scope.events, function(e) {
+                            var sD = new Date(e.date)
+                            sD = new Date(sD.getFullYear(), sD.getMonth(), 1)
+                            sD.setHours(0, 0, 0, 0)
+                            var eD = new Date(selectedYear, selectedMonth, 30).setHours(23, 59, 59, 999)
+                            if (e.endDate) {
+                                eD = new Date(e.endDate)
+                                eD = new Date(eD.getFullYear(), eD.getMonth(), 30)
+                                eD.setHours(23, 59, 59, 999)
+                            }
+                            var selectD = new Date(selectedYear, selectedMonth, 1).setHours(0, 0, 0, 0)
+                            if (selectD >= sD && selectD <= eD) { // 如果所選年月 >= 開始年月則要顯示 && 如有停課日期，則所選年月 <= 停課年月則要顯示
+                                currentMonthEvents.push(e)
+                            }
+                        })
 
                         for (var i = 0; i < 6; i++) { // 開始畫日期，共畫6週
                             if (typeof $scope.datesDisp[0][6] === 'undefined') { // 如果目前 datesDisp 第一個陣列沒完成 // 第一週
                                 for (var j = 0; j < 7; j++) {
+
                                     if (j < startDay) {
                                         $scope.datesDisp[i][j] = { "type": "oldMonth", "date": (prevMonthLastDates - startDay + 1) + j };
                                     } else { // 畫第一週
@@ -271,7 +273,7 @@ app.directive('myCalendar', function() {
                                             console.log('store close every month ' + closeByMonth)
                                             $scope.datesDisp[i][j] = { "type": "closeMonth", "date": countDatingStart }
                                         } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
-                                            console.log('dayOfBook is '+dayOfBook)
+                                            console.log('dayOfBook is ' + dayOfBook)
                                             $scope.datesDisp[i][j] = { "type": "dayOfBook", "date": countDatingStart };
                                         } else {
                                             $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
@@ -306,7 +308,7 @@ app.directive('myCalendar', function() {
                                             console.log('store close every month ' + closeByMonth)
                                             $scope.datesDisp[i][k] = { "type": "closeMonth", "date": countDatingStart }
                                         } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
-                                            console.log('dayOfBook is '+dayOfBook)
+                                            console.log('dayOfBook is ' + dayOfBook)
                                             $scope.datesDisp[i][k] = { "type": "dayOfBook", "date": countDatingStart };
                                         } else {
                                             $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart };
@@ -334,13 +336,14 @@ app.directive('myCalendar', function() {
 
                             }
                         }
-                    })
-                }
-                //  1.判斷預約日期是否為三天內,若為三天內則顯示紅色點且無法取消預約,若不在三天內則顯示藍色點且可以取消預約
-                //  2.找出資料庫內幾天前開放預約&店休日期,其他日期屏蔽掉
-                // ====================================================================
-                $scope.displayMonthCalendar();
-            });
+                        // })
+                    }
+                    //  1.判斷預約日期是否為三天內,若為三天內則顯示紅色點且無法取消預約,若不在三天內則顯示藍色點且可以取消預約
+                    //  2.找出資料庫內幾天前開放預約&店休日期,其他日期屏蔽掉
+                    // ====================================================================
+                    $scope.displayMonthCalendar();
+                });
+            })
         }],
         template: '<style>' +
             '.ionic_Calendar .calendar_Date .row.Daysheading {text-align:center;}' +
