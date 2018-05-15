@@ -12,6 +12,7 @@ let schema = new Schema({
     note: { type: String },
     code: { type: String },
     cancel: { type: Boolean, default: false },
+    store:{ type: Schema.Types.ObjectId, ref: 'Store' }
 }).plugin(plugin)
 
 module.exports = mongoose.model('Order', schema)

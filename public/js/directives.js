@@ -67,8 +67,8 @@ app.directive('myCalendar', function() {
 
                     $scope.returnToday = function() {
                         selectedYear = new Date().getFullYear(),
-                        selectedMonth = new Date().getMonth(),
-                        selectedDate = new Date().getDate();
+                            selectedMonth = new Date().getMonth(),
+                            selectedDate = new Date().getDate();
                         $scope.displayMonthCalendar();
                         $scope.displayCompleteDate();
                     }
@@ -182,6 +182,17 @@ app.directive('myCalendar', function() {
                     $scope.selectedDateClick = function(date) {
                         $scope.displayDate = date.date;
                         selectedDate = date.date;
+                        var date = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDate
+                        if (
+                            new Date().getDate() < selectedDate &&
+                            new Date(date).getDay() != closeDateByWeek &&
+                            closeByMonth.indexOf(selectedDate) < 0 &&
+                            selectedMonth == new Date().getMonth() &&
+                            new Date().getDate() + dayOfBook >= selectedDate
+                        ) {
+                            window.open("http://localhost:3000/#/booking/" + date, "_self")
+                        }
+
 
                         if (date.type == 'newMonth') {
                             var mnthDate = new Date(selectedYear, selectedMonth, 32)
@@ -272,6 +283,8 @@ app.directive('myCalendar', function() {
                                         } else if (closeByMonth.indexOf(countDatingStart) >= 0) { //每月固定店休
                                             console.log('store close every month ' + closeByMonth)
                                             $scope.datesDisp[i][j] = { "type": "closeMonth", "date": countDatingStart }
+                                        } else if (selectedMonth > new Date().getMonth()) {
+                                            $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart }
                                         } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                             console.log('dayOfBook is ' + dayOfBook)
                                             $scope.datesDisp[i][j] = { "type": "dayOfBook", "date": countDatingStart };
@@ -307,6 +320,8 @@ app.directive('myCalendar', function() {
                                         } else if (closeByMonth.indexOf(countDatingStart) >= 0) { //每月固定店休
                                             console.log('store close every month ' + closeByMonth)
                                             $scope.datesDisp[i][k] = { "type": "closeMonth", "date": countDatingStart }
+                                        } else if (selectedMonth > new Date().getMonth()) {
+                                            $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart }
                                         } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                             console.log('dayOfBook is ' + dayOfBook)
                                             $scope.datesDisp[i][k] = { "type": "dayOfBook", "date": countDatingStart };
@@ -377,7 +392,7 @@ app.directive('myCalendar', function() {
             '         <div class="col">日</div><div class="col">一</div><div class="col">二</div><div class="col">三</div><div class="col">四</div><div class="col">五</div><div class="col">六</div>' +
             '       </div>' +
             '       <div ng-swipe-left="selectedMonthNextClick()" ng-swipe-right="selectedMonthPrevClick()" on-swipe-left="selectedMonthNextClick()" on-swipe-right="selectedMonthPrevClick()" class="row Daysheading DaysDisplay" ng-repeat = "rowVal in datesDisp  track by $index" ng-class="{\'marginTop0\':$first}">' +
-            '         <div class="col date" ng-repeat = "colVal in rowVal  track by $index" ng-class="{\'fadeDateDisp\':(colVal.type == \'oldMonth\' || colVal.type == \'newMonth\'|| colVal.type == \'today\'|| colVal.type == \'closeWeek\'|| colVal.type == \'dayOfBook\'|| colVal.type == \'closeMonth\'), \'haveEventBlue\':(colVal.e) ,\'haveEventRed\':(colVal.e==false) ,\'selDate\':(colVal.date == displayDate && colVal.type == \'currentMonth\')}"  ng-click="selectedDateClick(colVal)" >{{colVal.date}}</div> ' +
+            '         <div class="col date" ng-repeat = "colVal in rowVal  track by $index" ng-class="{\'fadeDateDisp\':(colVal.type == \'oldMonth\' || colVal.type == \'newMonth\'|| colVal.type == \'today\'|| colVal.type == \'closeWeek\'|| colVal.type == \'dayOfBook\'|| colVal.type == \'closeMonth\'|| colVal.type == \'wrongMonth\'), \'haveEventBlue\':(colVal.e) ,\'haveEventRed\':(colVal.e==false) ,\'selDate\':(colVal.date == displayDate && colVal.type == \'currentMonth\')}"  ng-click="selectedDateClick(colVal)" >{{colVal.date}}</div> ' +
             '       </div>' +
             '   </div>' +
             '   <div class="calendar_Month" ng-show="UICalendarDisplay.Month">' +

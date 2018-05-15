@@ -23,7 +23,7 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
             $scope.date = date
         })
 
-    $(document).ready(function() {
+    $(document).ready(function() { //選定下拉式選單
         $('#storeName').change(function() {
             var store = $(this).find("option:selected").attr('value')
 
@@ -32,15 +32,23 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
                     .then(function(res, req) {
                         list = []
                         $scope.store = res.data[0]
-                        for (i = 0; i < res.data[0].endAt - res.data[0].startAt; i+=Number(res.data[0].bookingBlock)) {
+                        for (i = 0; i < res.data[0].endAt - res.data[0].startAt; i += Number(res.data[0].bookingBlock)) {
                             list.push(i)
                             $scope.list = list
+                        }
+
+                        if (res.data[0].sameTimeBook < 0) { //設定狀態
+                            $scope.status = "V"
+                        } else {
+                            $scope.status = "X"
                         }
                     })
             }
             gototime()
         });
     });
+
+
 
 
 });

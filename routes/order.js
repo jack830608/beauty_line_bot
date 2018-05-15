@@ -46,7 +46,8 @@ module.exports = function(app) {
             user: data.user,
             note: data.note,
             code: randomString,
-            cancel: data.cancel
+            cancel: data.cancel,
+            store: data.store
         });
         console.log('add new Order');
         res.send('預約成功')
