@@ -1,0 +1,41 @@
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    word-break: break-all;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    width: 33%;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+<div ng-controller="bookingCtrl">
+    <select id="storeName" style="width: 200px ;height:30px">
+        <option>請選擇門市</option>
+        <option ng-repeat="storeList in storeLists" value="{{storeList.name}}">{{storeList.name}}</option>
+    </select>
+    <br>
+    <br>
+    <div style="overflow: scroll; height: 750px; width: 100%">
+        <table ng-if="store">
+            <tr>
+                <th>預約時段</th>
+                <th>狀態</th>
+            </tr>
+            <tr ng-repeat="i in list">
+                <td>
+                    {{((store.startAt | STN)+i) | int}}:{{(((store.startAt | STN)+i)| dot)*6}}0 ~ {{((store.startAt | STN)+i+(store.bookingBlock | STN) |int)}}:{{(((store.startAt| STN)+i+(store.bookingBlock | STN))|dot) *6}}0</td>
+            </tr>
+        </table>
+    </div>
+</div>
