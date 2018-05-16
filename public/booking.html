@@ -26,17 +26,17 @@ tr:nth-child(even) {
     </select>
     <br>
     <br>
-    <div style="overflow: scroll; height: 750px; width: 100%">
+    <div style="overflow: scroll; height: 730px; width: 100%">
         <table ng-if="store">
             <tr>
                 <th>預約時段</th>
                 <th>狀態</th>
             </tr>
-            <tr ng-repeat="i in list">
+            <tr ng-repeat="i in list" ">
                 <td>
                     {{((store.startAt | STN)+i) | int}}:{{(((store.startAt | STN)+i)| dot)*6}}0 ~ {{((store.startAt | STN)+i+(store.bookingBlock | STN) |int)}}:{{(((store.startAt| STN)+i+(store.bookingBlock | STN))|dot) *6}}0</td>
-                <td ng-if=status=="V" style="color: blue"> {{status}}</td>
-                <td ng-if=status=="X" style="color:red"> {{status}}</td>
+                    <td style="color: red;font-weight:bold " ng-if="check[$index]>=store.sameTimeBook" >X</td>
+                <td style="color: blue;font-weight:bold" ng-if="check[$index] <store.sameTimeBook">V</td>
             </tr>
         </table>
     </div>

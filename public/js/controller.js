@@ -18,8 +18,7 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
     $http.get(URL + "/user/" + date + '/booking')
         .then(function(res, req) {
 
-            $scope.orderLists = res.data[0]
-            $scope.storeLists = res.data[1]
+            $scope.storeLists = res.data
             $scope.date = date
         })
 
@@ -28,27 +27,16 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
             var store = $(this).find("option:selected").attr('value')
 
             function gototime() {
-                $http.post(URL + "/booking/" + store)
+                $http.post(URL + "/booking/" + store + "/" + date)
                     .then(function(res, req) {
-                        list = []
-                        $scope.store = res.data[0]
-                        for (i = 0; i < res.data[0].endAt - res.data[0].startAt; i += Number(res.data[0].bookingBlock)) {
-                            list.push(i)
-                            $scope.list = list
-                        }
-
-                        if (res.data[0].sameTimeBook < 0) { //設定狀態
-                            $scope.status = "V"
-                        } else {
-                            $scope.status = "X"
-                        }
+                        $scope.store = res.data[0][0]
+                        $scope.list = res.data[1]
+                        $scope.check = res.data[2]
                     })
             }
             gototime()
         });
     });
-
-
 
 
 });

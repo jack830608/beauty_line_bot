@@ -168,6 +168,16 @@ app.directive('myCalendar', function() {
                     //  $scope.UICalendarDisplay.Year = false;
                     //  $scope.displayCompleteDate();
                     // }
+                    function getLastDay(year, month) {
+                        var new_year = year;
+                        var new_month = month++;
+                        if (month > 12) {
+                            new_month -= 12;
+                            new_year++;
+                        }
+                        var new_date = new Date(new_year, new_month, 1);
+                        return (new Date(new_date.getTime() - 1000 * 60 * 60 * 24)).getDate();
+                    }
 
                     $scope.selectedMonthClick = function(month) {
                         $scope.dislayMonth = month;
@@ -184,12 +194,19 @@ app.directive('myCalendar', function() {
                         selectedDate = date.date;
                         var date = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDate
                         if (
-                            new Date().getDate() < selectedDate &&
+                            new Date().getDate() <= selectedDate &&
                             new Date(date).getDay() != closeDateByWeek &&
                             closeByMonth.indexOf(selectedDate) < 0 &&
                             selectedMonth == new Date().getMonth() &&
                             new Date().getDate() + dayOfBook >= selectedDate
-                        ) {
+                        ) { window.open("http://localhost:3000/#/booking/" + date, "_self") } else if (new Date(date).getDay() != closeDateByWeek &&
+                            closeByMonth.indexOf(selectedDate) < 0 &&
+                            new Date().getDate() + dayOfBook > getLastDay(new Date().getFullYear(), new Date().getMonth()) &&
+                            selectedMonth == new Date().getMonth() + 1 &&
+                            (new Date().getDate() + dayOfBook) - getLastDay(new Date().getFullYear(), new Date().getMonth()) > selectedDate
+                        )
+
+                        {
                             window.open("http://localhost:3000/#/booking/" + date, "_self")
                         }
 
@@ -268,6 +285,8 @@ app.directive('myCalendar', function() {
                             }
                         })
 
+
+
                         for (var i = 0; i < 6; i++) { // 開始畫日期，共畫6週
                             if (typeof $scope.datesDisp[0][6] === 'undefined') { // 如果目前 datesDisp 第一個陣列沒完成 // 第一週
                                 for (var j = 0; j < 7; j++) {
@@ -275,7 +294,7 @@ app.directive('myCalendar', function() {
                                     if (j < startDay) {
                                         $scope.datesDisp[i][j] = { "type": "oldMonth", "date": (prevMonthLastDates - startDay + 1) + j };
                                     } else { // 畫第一週
-                                        if (countDatingStart < new Date().getDate()) { //今天以前的日期全部反灰
+                                        if (selectedMonth == new Date().getMonth() && countDatingStart < new Date().getDate()) { //今天以前的日期全部反灰
                                             $scope.datesDisp[i][j] = { "type": "today", "date": countDatingStart };
                                         } else if (j == closeDateByWeek) { //每週固定店休
                                             console.log('store close every week ' + closeDateByWeek)
@@ -283,11 +302,16 @@ app.directive('myCalendar', function() {
                                         } else if (closeByMonth.indexOf(countDatingStart) >= 0) { //每月固定店休
                                             console.log('store close every month ' + closeByMonth)
                                             $scope.datesDisp[i][j] = { "type": "closeMonth", "date": countDatingStart }
-                                        } else if (selectedMonth > new Date().getMonth()) {
-                                            $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart }
+                                        } else if (selectedMonth != new Date().getMonth()) { //只要不等於本月訂單全部不可以選
+                                            if (new Date().getDate() + dayOfBook > getLastDay(new Date().getFullYear(), new Date().getMonth()) &&
+                                                selectedMonth == new Date().getMonth() + 1 &&
+                                                (new Date().getDate() + dayOfBook) - getLastDay(new Date().getFullYear(), new Date().getMonth()) > countDatingStart
+                                            ) { $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart } } else { $scope.datesDisp[i][j] = { "type": "wrongMonth", "date": countDatingStart } }
+
                                         } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                             console.log('dayOfBook is ' + dayOfBook)
                                             $scope.datesDisp[i][j] = { "type": "dayOfBook", "date": countDatingStart };
+
                                         } else {
                                             $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
                                             _.map(currentMonthEvents, function(e) {
@@ -312,7 +336,7 @@ app.directive('myCalendar', function() {
                             } else {
                                 for (var k = 0; k < 7; k++) {
                                     if (countDatingStart <= endingDateLimit) {
-                                        if (countDatingStart < new Date().getDate()) { //今天以前的日期全部反灰
+                                        if (selectedMonth == new Date().getMonth() && countDatingStart < new Date().getDate()) { //今天以前的日期全部反灰
                                             $scope.datesDisp[i][k] = { "type": "today", "date": countDatingStart };
                                         } else if (k == closeDateByWeek) { //每週固定店休
                                             console.log('store close every week ' + closeDateByWeek)
@@ -320,11 +344,15 @@ app.directive('myCalendar', function() {
                                         } else if (closeByMonth.indexOf(countDatingStart) >= 0) { //每月固定店休
                                             console.log('store close every month ' + closeByMonth)
                                             $scope.datesDisp[i][k] = { "type": "closeMonth", "date": countDatingStart }
-                                        } else if (selectedMonth > new Date().getMonth()) {
-                                            $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart }
+                                        } else if (selectedMonth != new Date().getMonth()) {
+                                            if (new Date().getDate() + dayOfBook > getLastDay(new Date().getFullYear(), new Date().getMonth()) &&
+                                                selectedMonth == new Date().getMonth() + 1 &&
+                                                (new Date().getDate() + dayOfBook) - getLastDay(new Date().getFullYear(), new Date().getMonth()) > countDatingStart
+                                            ) { $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart } } else { $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart } }
                                         } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                             console.log('dayOfBook is ' + dayOfBook)
                                             $scope.datesDisp[i][k] = { "type": "dayOfBook", "date": countDatingStart };
+
                                         } else {
                                             $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart };
                                             _.map(currentMonthEvents, function(e) { // 尋找當月課程是否與當前同天，有的話則紀錄當天有 event
