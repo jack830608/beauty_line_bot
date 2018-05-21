@@ -59,16 +59,17 @@
                 <br>
                 <div><span style="position:absolute;left:2.5%">日期：{{dataDetail.date.getFullYear()}}年{{dataDetail.date.getMonth()+1}}月{{dataDetail.date.getDate()}}日</span>
                     <span style="position:absolute;left:16%">時段：{{dataDetail.startAt | int}}:{{(dataDetail.startAt - dataDetail.startAt | int)*6}}0 ~ {{dataDetail.endAt | int}}:{{(dataDetail.endAt - dataDetail.endAt | int)*6}}0</span></div>
+                <span style="position:absolute;left:29.5%">分店名稱：{{dataDetail.store.name}}</span>
                 <br>
                 <br>
                 <div>
-                    <span style="position:absolute;left:2.5%">電話：{{dataDetail.phone}} </span>
+                    <span style="position:absolute;left:2.5%">電話：{{dataDetail.user.phone}} </span>
                     <span style="position:absolute;left:16%">姓名：{{dataDetail.user.name}}</span>
-                    <span style="position:absolute;left:28.5%">預約驗證碼：{{dataDetail.code}}</span>
+                    <span style="position:absolute;left:29.5%">預約驗證碼：{{dataDetail.code}}</span>
                 </div>
                 <br>
                 <br>
-                <div><span style="position:absolute;left:2.5%">備註：{{dataDetail.note}}</span> </div>
+                <div><span style="position:absolute;left:2.5%">備註：{% if dataDetail.note !="undefined" %}{{dataDetail.note}} {% else %} 無 {% endif %}</span> </div>
                 <br>
                 <br>------------------------------------------------------------------------------------
                 <br>

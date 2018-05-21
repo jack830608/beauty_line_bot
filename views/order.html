@@ -79,9 +79,9 @@
                     <tr>
                         <td>{{order.date.getFullYear()}}年{{order.date.getMonth()+1}}月{{order.date.getDate()}}日</td>
                         <td>{{order.startAt | int}}:{{(order.startAt - order.startAt | int)*6}}0 ~ {{order.endAt | int}}:{{(order.endAt - order.endAt | int)*6}}0</td>
-                        <td>{{order.phone}}
-                            <span style="position:absolute;right:4%">
-                            <button onclick="location.href='/order/details/{{order._id}}'">詳細資料</button></span></td>
+                        <td>{{order.user.phone}}
+                            <span style="position:absolute;right:4% ">
+                            <button onclick="location.href='/order/details/{{order._id}}' ">詳細資料</button></span></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -89,9 +89,9 @@
         </div>
     </div>
     <script>
-    $("#menu-toggle").click(function(e) {
+    $("#menu-toggle ").click(function(e) {
         e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+        $("#wrapper ").toggleClass("toggled ");
     });
     </script>
     </script>

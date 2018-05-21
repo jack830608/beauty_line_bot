@@ -7,18 +7,22 @@ module.exports = function(app) {
 
         if (req.query.search_query) {
             var findName = await User.find({ name: req.query.search_query })
-            var findData = await Order.find({
-                $or: [{ phone: req.query.search_query },
-                    { code: req.query.search_query }
-                ]
-            })
+            var findPhone = await User.find({ phone: req.query.search_query })
+            var findData = await Order.find({ code: req.query.search_query }).populate('user')
             if (findName.length !== 0) {
                 var arr = []
                 for (i = 0; i < findName.length; i++) {
-                    var findData = await Order.find({ user: findName[i]._id })
-                    arr.push(findData[0])
+                    var findData = await Order.find({ user: findName[i]._id }).populate('user')
+                    arr.push(findData)
                 }
-                res.render('../views/order.html', { orders: arr, title: "訂單管理" })
+                res.render('../views/order.html', { orders: arr[1], title: "訂單管理" })
+            } else if (findPhone.length !== 0) {
+                var arr = []
+                for (i = 0; i < findPhone.length; i++) {
+                    var findData = await Order.find({ user: findPhone[i]._id }).populate('user')
+                    arr.push(findData)
+                }
+                res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
             } else if (findData.length !== 0) {
                 res.render('../views/order.html', { orders: findData, title: "訂單管理" })
             } else if (findData.length == 0 && findName.length == 0) {
@@ -26,7 +30,7 @@ module.exports = function(app) {
                 res.redirect('/order')
             }
         } else {
-            let orderList = await Order.find({})
+            let orderList = await Order.find({}).populate('user')
             res.render('../views/order.html', {
                 orders: orderList,
                 infoMessages: req.flash('info'),
@@ -62,7 +66,7 @@ module.exports = function(app) {
         start.setHours(0, 0, 0, 0)
         let end = new Date(req.body.date)
         end.setHours(23, 59, 59, 999)
-        let dateFind = await Order.find({ date: { $lte: end, $gte: start } });
+        let dateFind = await Order.find({ date: { $lte: end, $gte: start } }).populate('user');
         if (dateFind.length == 0) {
             req.flash('info', '查無資料')
             res.redirect('/order')
@@ -72,7 +76,7 @@ module.exports = function(app) {
     }))
 
     app.get('/order/details/:id', wrap(async(req, res, next) => {
-        let dataDetails = await Order.findOne({ _id: req.params.id }).populate('user');
+        let dataDetails = await Order.findOne({ _id: req.params.id }).populate('user').populate('store');
         let thisDate = new Date(dataDetails.date).setHours(0, 0, 0, 0)
         let today = new Date()
         today.setHours(0, 0, 0, 0)

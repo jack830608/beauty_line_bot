@@ -1,3 +1,4 @@
+<title>預約</title>
 <style>
 table {
     font-family: arial, sans-serif;
@@ -20,10 +21,17 @@ tr:nth-child(even) {
 }
 </style>
 <div ng-controller="bookingCtrl">
-    <select id="storeName" style="width: 200px ;height:30px">
-        <option>請選擇門市</option>
+    <select  id="storeName" style="width: 200px ;height:30px">
         <option ng-repeat="storeList in storeLists" value="{{storeList.name}}">{{storeList.name}}</option>
     </select>
+
+<!-- <select id="storeName" ng-model="somethingHere" 
+        ng-init="somethingHere = somethingHere || storeLists[0].value"
+        ng-options="option.value as option.name for option in storeLists">
+</select> -->
+
+
+
     <br>
     <br>
     <div style="overflow: scroll; height: 730px; width: 100%">
@@ -32,11 +40,11 @@ tr:nth-child(even) {
                 <th>預約時段</th>
                 <th>狀態</th>
             </tr>
-            <tr ng-repeat="i in list" ">
+            <tr ng-repeat="i in list" ng-click=" check[$index] <store.sameTimeBook && click((store.startAt |STN) +i,(store.startAt | STN)+i+(store.bookingBlock | STN),store.name)">
                 <td>
                     {{((store.startAt | STN)+i) | int}}:{{(((store.startAt | STN)+i)| dot)*6}}0 ~ {{((store.startAt | STN)+i+(store.bookingBlock | STN) |int)}}:{{(((store.startAt| STN)+i+(store.bookingBlock | STN))|dot) *6}}0</td>
-                    <td style="color: red;font-weight:bold " ng-if="check[$index]>=store.sameTimeBook" >X</td>
-                <td style="color: blue;font-weight:bold" ng-if="check[$index] <store.sameTimeBook">V</td>
+                <td style="color: red;font-weight:bold " ng-if="check[$index]>=store.sameTimeBook" ">X</td>
+                <td style="color: blue;font-weight:bold " ng-if="check[$index] <store.sameTimeBook ">V</td>
             </tr>
         </table>
     </div>
