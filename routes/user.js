@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const Order = require('../models/order')
 const Store = require('../models/store')
+const Closed = require('../models/closed')
 const Init = require('../models/init')
 const wrap = require('../lib/async-wrapper')
 const crypto = require('crypto');
@@ -9,6 +10,11 @@ module.exports = function(app) {
 
     app.get("/user/:id/order", wrap(async(req, res, next) => {
         let orderList = await Order.find({ user: req.params.id }).populate("store")
+        res.send(orderList);
+    }))
+
+    app.get("/user/:id/myorder", wrap(async(req, res, next) => {
+        let orderList = await Order.find({ user: req.params.id }).populate("store").sort('date')
         res.send(orderList);
     }))
 
@@ -74,6 +80,7 @@ module.exports = function(app) {
         var randomString = crypto.randomBytes(32).toString('base64').substr(0, 6);
         var init = await Init.findOne({});
         var orders = await Order.find({
+            date: req.params.date,
             store: storeList._id,
             startAt: req.params.startTime,
             endAt: req.params.endTime,
@@ -104,7 +111,7 @@ module.exports = function(app) {
 
     app.post('/cancel/:orderId', wrap(async(req, res, next) => {
         var orderId = req.params.orderId
-        await Order.remove({ _id: orderId })
+        await Order.findOneAndUpdate({ _id: orderId }, { cancel: true })
         console.log('Delete success!');
         res.send('delete')
     }))

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        width: 33%;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+    </style>
+    <title>{{title}}</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <script src="node_modules/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                </li>
+                <li>
+                    <a href="/order">訂單管理</a>
+                </li>
+                <li>
+                    <a href="/store">門市管理</a>
+                </li>
+                <li>
+                    <a href="/init">初始化修改</a>
+                </li>
+                <li>
+                    <a href="/closed">店休設定</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                <br>
+                <br>
+                <h1 style="display: inline">店休設定</h1>
+                <span style="position:absolute;right:45%"><a href="/closed/date" ><img src="images/date.png" width="20%" height="20%" style="display: inline "></a></span>
+                <br>
+                <span align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體;position:absolute;right:4%">{{infoMessages}}</span>
+                <br>
+                <br>
+                <br>
+                <table>
+                    <tr>
+                        <th>店休日期</th>
+                        <th> </th>
+                    </tr>
+                    {% for close in closed %}
+                    <tr>
+                        <td>{{close.date.getFullYear()}}年{{close.date.getMonth()+1}}月{{close.date.getDate()}}日</td>
+                        <td>
+                            <form action="/closed/{{close._id}}/delete" method="POST" style="font-family: 微軟正黑體 ; display: inline;">
+                                <button>取消</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+    $("#menu-toggle ").click(function(e) {
+        e.preventDefault();
+        $("#wrapper ").toggleClass("toggled ");
+    });
+    </script>
+    </script>
+</body>
+
+</html>

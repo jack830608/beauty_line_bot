@@ -1,0 +1,14 @@
+<title>預約成功</title>
+<div ng-controller="completeCtrl">
+	<div   style="border-width:3px;border-style:dashed;padding:5px; width: 20%">
+    <h1 align="center">預約成功</h1>
+    <br>
+    <h5 align="center">預約日期：{{date}}</h5>
+    <h5 align="center">預約時間：{{startAt | int}}:{{(startAt |dot) *6}}0 ~ {{endAt | int}}:{{(endAt |dot) *6}}0</h5>
+    <h5 align="center">分店名稱：{{store}}</h5>
+    <h5 align="center" ng-if="note == 'undefined'">備註：無</h5>
+    <h5 align="center" ng-if="note != 'undefined'">備註：{{note}}</h5>
+    <h3 align="center" style="color: red">預約驗證碼：{{code}}</h3>
+    <br>
+    </div>
+</div>

@@ -8,7 +8,9 @@ const session = require('express-session');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
 const database = require('./lib/database')
-var Store = require('./models/store')
+const Store = require('./models/store')
+const sendMessage = require('./lib/sendMessage')
+
 nunjucks.configure('views', {
     autoescape: true,
     express: app,

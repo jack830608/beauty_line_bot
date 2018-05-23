@@ -1,6 +1,7 @@
 app.controller('calendarCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
     var URL = 'http://localhost:3000'
+
     $http.get(URL + "/user/" + userId + '/order')
         .then(function(res, req) {
             $scope.$broadcast('loadEvents', [res.data, userId])
@@ -8,6 +9,10 @@ app.controller('calendarCtrl', function($scope, $routeParams, $http) {
     $http.get(URL + "/init" + '/list')
         .then(function(res, req) {
             $scope.$broadcast('initList', res.data)
+        })
+    $http.get(URL + "/closed" + '/list')
+        .then(function(res, req) {
+            $scope.$broadcast('closedList', res.data)
         })
 
 });
@@ -98,10 +103,11 @@ app.controller('completeCtrl', function($scope, $routeParams, $http) {
 app.controller('myorderCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
     var URL = 'http://localhost:3000'
-    $http.get(URL + "/user/" + userId + '/order')
+    $http.get(URL + "/user/" + userId + '/myorder')
         .then(function(res, req) {
             $scope.orders = res.data
             $scope.DD = new Date()
+
         })
     $scope.cancel = function(orderId) { //取得預約網址
         if (confirm("確認取消預約？") == true)

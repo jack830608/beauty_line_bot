@@ -2,6 +2,8 @@ const Order = require('../models/order')
 const User = require('../models/user')
 const wrap = require('../lib/async-wrapper')
 const crypto = require('crypto');
+
+
 module.exports = function(app) {
     app.get("/order", wrap(async(req, res, next) => {
 
@@ -12,14 +14,14 @@ module.exports = function(app) {
             if (findName.length !== 0) {
                 var arr = []
                 for (i = 0; i < findName.length; i++) {
-                    var findData = await Order.find({ user: findName[i]._id }).populate('user')
+                    var findData = await Order.find({ user: findName[i]._id }).populate('user').sort('date')
                     arr.push(findData)
                 }
                 res.render('../views/order.html', { orders: arr[1], title: "訂單管理" })
             } else if (findPhone.length !== 0) {
                 var arr = []
                 for (i = 0; i < findPhone.length; i++) {
-                    var findData = await Order.find({ user: findPhone[i]._id }).populate('user')
+                    var findData = await Order.find({ user: findPhone[i]._id }).populate('user').sort('date')
                     arr.push(findData)
                 }
                 res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
@@ -30,7 +32,7 @@ module.exports = function(app) {
                 res.redirect('/order')
             }
         } else {
-            let orderList = await Order.find({}).populate('user')
+            let orderList = await Order.find({date:{$gte : new Date().setHours(0, 0, 0, 0)}}).populate('user').sort('date')
             res.render('../views/order.html', {
                 orders: orderList,
                 infoMessages: req.flash('info'),
@@ -104,9 +106,7 @@ module.exports = function(app) {
     }))
 
     app.post('/order/cancel/:id', wrap(async(req, res, next) => {
-        let orderList = await Order.findOne({ _id: req.params.id })
-        // let oldstatus = { cancel: orderList.cancel }
-        await Order.update({ cancel: orderList.cancel }, { cancel: true })
+        await Order.findOneAndUpdate({ _id: req.params.id }, { cancel: true })
         console.log('Cancel success!');
         req.flash('info', '取消預約成功')
         res.redirect('back')
