@@ -3,6 +3,7 @@ const store = require('./store')
 const admin = require('./admin')
 const user = require('./user')
 const init = require('./init')
+const about = require('./about')
 const closed = require('./closed')
 
 module.exports = function(app) {
@@ -14,6 +15,7 @@ module.exports = function(app) {
     admin(app);
     user(app);
     init(app);
+    about(app);
     closed(app);
 
     app.get('*', function(req, res) {

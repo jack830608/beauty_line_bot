@@ -14,6 +14,9 @@ var app = angular.module('app', ['ngRoute', 'swipe'], function($routeProvider) {
     $routeProvider.when('/myorder/:userId', {
         templateUrl: 'myorder.html'
     });
+    $routeProvider.when('/about', {
+        templateUrl: 'about.html'
+    });
 
 });
 

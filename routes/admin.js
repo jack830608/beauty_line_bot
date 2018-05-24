@@ -1,5 +1,6 @@
 var Admin = require('../models/admin')
 const wrap = require('../lib/async-wrapper')
+const md5 = require('../lib/md5');
 
 module.exports = function(app) {
 
@@ -14,9 +15,9 @@ module.exports = function(app) {
     })
 
     app.post('/admin/signin', wrap(async(req, res, next) => {
-        let pass = await Admin.findOne({ username: req.body.username, password: req.body.password })
+        let pass = await Admin.findOne({ username: req.body.username, password: md5(req.body.password) })
         if (pass) {
-            res.redirect('/admin')
+            res.redirect('/order')
         } else {
             res.redirect('back')
         }
@@ -39,7 +40,7 @@ module.exports = function(app) {
                 req.flash('err', '密碼錯誤,請重新輸入!')
                 res.redirect('/admin/signup')
             } else {
-                Admin.create({ username: req.body.username, password: req.body.password });
+                Admin.create({ username: req.body.username, password: md5(req.body.password) });
                 console.log('add new Admin');
                 req.flash('err', '管理帳號建立成功,請登入')
                 res.redirect('/admin/signin')

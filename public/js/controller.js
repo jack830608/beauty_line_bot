@@ -116,12 +116,21 @@ app.controller('myorderCtrl', function($scope, $routeParams, $http) {
                 if (res.data == 'delete') {
                     window.location.reload()
                 } else { alert('錯誤') }
-
             })
         else
             return false;
-
-
     }
 
 });
+
+
+
+app.controller('aboutCtrl', function($scope, $routeParams, $http) {
+    var URL = 'http://localhost:3000'
+    $http.get(URL + "/about/data")
+        .then(function(res, req) {
+            $scope.storeLists = res.data[0]
+            console.log(res.data[0])
+            $scope.about = res.data[1]
+        })
+})

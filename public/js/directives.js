@@ -69,6 +69,7 @@ app.directive('myCalendar', function() {
 
 
 
+
                         $scope.UICalendarDisplay = {};
                         $scope.UICalendarDisplay.Date = true;
                         $scope.UICalendarDisplay.Month = false;
@@ -269,7 +270,6 @@ app.directive('myCalendar', function() {
                                     currentMonthEvents.push(e)
                                 }
                             })
-
 
 
                             for (var i = 0; i < 6; i++) { // 開始畫日期，共畫6週
