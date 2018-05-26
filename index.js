@@ -10,12 +10,14 @@ const cookieParser = require('cookie-parser')
 const database = require('./lib/database')
 const Store = require('./models/store')
 const sendMessage = require('./lib/sendMessage')
+const morgan = require('morgan')
 
 nunjucks.configure('views', {
     autoescape: true,
     express: app,
     watch: true
 });
+app.use(morgan('dev'))
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

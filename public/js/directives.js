@@ -61,6 +61,7 @@ app.directive('myCalendar', function() {
                         return parseInt(item, 10); //將Srting轉成Array
                     });
 
+                    // 當取得特地休假日時
                     $scope.$on('closedList', function(e, closed) {
                         var closedList = []
                         for (var i = 0; i < closed.length; i++) {

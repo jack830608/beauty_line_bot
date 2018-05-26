@@ -9,8 +9,6 @@ let schema = new Schema({
     endAt: { type: String },
     bookingBlock: { type: String },
     sameTimeBook: { type: Number },
-    phone:{ type: String },
-    address:{ type: String }
     // closeDateByMonth: [],
     // closeDateByWeek: { type: String },
     // dayOfBook: { type: Number },

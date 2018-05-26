@@ -5,14 +5,14 @@ app.controller('calendarCtrl', function($scope, $routeParams, $http) {
     $http.get(URL + "/user/" + userId + '/order')
         .then(function(res, req) {
             $scope.$broadcast('loadEvents', [res.data, userId])
-        })
-    $http.get(URL + "/init" + '/list')
-        .then(function(res, req) {
-            $scope.$broadcast('initList', res.data)
-        })
-    $http.get(URL + "/closed" + '/list')
-        .then(function(res, req) {
-            $scope.$broadcast('closedList', res.data)
+            $http.get(URL + "/init" + '/list')
+                .then(function(res, req) {
+                    $scope.$broadcast('initList', res.data)
+                    $http.get(URL + "/closed" + '/list')
+                        .then(function(res, req) {
+                            $scope.$broadcast('closedList', res.data)
+                        })
+                })
         })
 
 });
@@ -122,15 +122,3 @@ app.controller('myorderCtrl', function($scope, $routeParams, $http) {
     }
 
 });
-
-
-
-app.controller('aboutCtrl', function($scope, $routeParams, $http) {
-    var URL = 'http://localhost:3000'
-    $http.get(URL + "/about/data")
-        .then(function(res, req) {
-            $scope.storeLists = res.data[0]
-            console.log(res.data[0])
-            $scope.about = res.data[1]
-        })
-})

@@ -9,6 +9,7 @@
     <link href="../../css/simple-sidebar.css" rel="stylesheet">
     <script src="../../node_modules/jquery-ui/external/jquery/jquery.js"></script>
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../node_modules/ckeditor/ckeditor.js"></script>
 </head>
 
 <body>
@@ -43,24 +44,16 @@
                 <span align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體;position:absolute;right:4% ">{{infoMessages}}</span>
                 <br>
                 <form action="/about" autocomplete='off' method="POST" style="font-family: 微軟正黑體 ;display:inline">
-                    <br> 介紹：
                     <br>
-                    <textarea name="introduce" cols="30" rows="10">{{about.introduce}}</textarea>
-                    <br>------------------------------------------
-                    <br> {% for store in stores %}
-                    <div class="store ">{{ store.name }}
-                        <br>
-                        電話：<input type="text" name="phone" value={{ store.phone }}>
-                        <br> 
-                        地址：<input style="width: 350px" type="text" name="address" value={{ store.address }}>
-                        <br>
-                        <br>------------------------------------------
-                    </div>
-                    {% endfor %}
+                    <textarea name="introduce" rows="10" cols="80">{{about.introduce}}</textarea>
+                    <script>
+                    CKEDITOR.replace('introduce', {height: 400});
+                    </script>
             </div>
         </div>
     </div>
-    <span style="position:absolute;left:26.7%"><button type="submit">確認</button></span>
+
+    <span style="position:absolute;left:3%"><button type="submit">儲存</button></span>
     </form>
     <br>
     <br>

@@ -37,3 +37,9 @@ app.filter("STN", function() {
         return Number(text);
     };
 });
+
+app.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+});

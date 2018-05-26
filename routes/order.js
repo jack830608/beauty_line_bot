@@ -6,7 +6,6 @@ const crypto = require('crypto');
 
 module.exports = function(app) {
     app.get("/order", wrap(async(req, res, next) => {
-
         if (req.query.search_query) {
             var findName = await User.find({ name: req.query.search_query })
             var findPhone = await User.find({ phone: req.query.search_query })
@@ -17,7 +16,7 @@ module.exports = function(app) {
                     var findData = await Order.find({ user: findName[i]._id }).populate('user').sort('date')
                     arr.push(findData)
                 }
-                res.render('../views/order.html', { orders: arr[1], title: "訂單管理" })
+                res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
             } else if (findPhone.length !== 0) {
                 var arr = []
                 for (i = 0; i < findPhone.length; i++) {
@@ -32,7 +31,7 @@ module.exports = function(app) {
                 res.redirect('/order')
             }
         } else {
-            let orderList = await Order.find({date:{$gte : new Date().setHours(0, 0, 0, 0)}}).populate('user').sort('date')
+            let orderList = await Order.find({ date: { $gte: new Date().setHours(0, 0, 0, 0) } }).populate('user').sort('date')
             res.render('../views/order.html', {
                 orders: orderList,
                 infoMessages: req.flash('info'),
@@ -73,7 +72,11 @@ module.exports = function(app) {
             req.flash('info', '查無資料')
             res.redirect('/order')
         } else {
-            res.render('../views/order.html', { orders: dateFind, title: "訂單管理" })
+            res.render('../views/order.html', {
+                orders: dateFind,
+                title: "訂單管理",
+                date: new Date(req.body.date).getFullYear() + "/" + (new Date(req.body.date).getMonth() + 1) + "/" + new Date(req.body.date).getDate()
+            })
         }
     }))
 
