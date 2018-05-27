@@ -21,17 +21,9 @@ tr:nth-child(even) {
 }
 </style>
 <div ng-controller="bookingCtrl">
-    <select  id="storeName" style="width: 200px ;height:30px">
+    <select id="storeName" style="width: 200px ;height:30px">
         <option ng-repeat="storeList in storeLists" value="{{storeList.name}}">{{storeList.name}}</option>
     </select>
-
-<!-- <select id="storeName" ng-model="somethingHere" 
-        ng-init="somethingHere = somethingHere || storeLists[0].value"
-        ng-options="option.value as option.name for option in storeLists">
-</select> -->
-
-
-
     <br>
     <br>
     <div style="overflow: scroll; height: 730px; width: 100%">

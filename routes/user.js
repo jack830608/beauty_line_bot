@@ -36,7 +36,7 @@ module.exports = function(app) {
         start.setHours(0, 0, 0, 0)
         var end = new Date(req.params.date)
         end.setHours(23, 59, 59, 999)
-        for (i = 0; i < storeList[0].endAt - storeList[0].startAt; i += Number(storeList[0].bookingBlock)) {
+        for (i = 0; i <= storeList[0].endAt - storeList[0].startAt - storeList[0].bookingBlock; i += Number(storeList[0].bookingBlock)) {
             list.push(i)
             var orderList = await Order.find({
                 store: storeList[0]._id,

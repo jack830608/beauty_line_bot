@@ -43,9 +43,23 @@
                 <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
                 <br>
                 <br>
-                <h1>按日期查詢</h1>
+                <h1>按日期&門市查詢</h1>
+                <span align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體;position:absolute;right:4%">{{infoMessages}}</span>
+                <br>
+                <br>
                 <form action="/orderbydate" method="POST" autocomplete='off'>
+                    請選擇日期
                     <input type="text" id="datepicker" name="date">
+                    <br>
+                    <br>請選擇門市
+                    <select name="store">
+                        <option value="0">--</option>
+                        {% for store in storeList %}
+                        <option value="{{store.name}}">{{store.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <br>
                     <button type="submit">確認</button>
                 </form>
                 <br>

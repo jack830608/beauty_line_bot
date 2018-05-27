@@ -2,6 +2,7 @@ const Order = require('../models/order')
 const User = require('../models/user')
 const wrap = require('../lib/async-wrapper')
 const crypto = require('crypto');
+const Store = require('../models/store')
 
 
 module.exports = function(app) {
@@ -59,24 +60,71 @@ module.exports = function(app) {
     }))
 
     app.get('/order/date', wrap(async(req, res, next) => {
-        res.render('../views/date.html', { title: "按日期查詢" })
+        let storeList = await Store.find({})
+        res.render('../views/date.html', { title: "按日期查詢", storeList: storeList, infoMessages: req.flash('info'), })
     }))
 
     app.post('/orderbydate', wrap(async(req, res, next) => {
-        let start = new Date(req.body.date)
-        start.setHours(0, 0, 0, 0)
-        let end = new Date(req.body.date)
-        end.setHours(23, 59, 59, 999)
-        let dateFind = await Order.find({ date: { $lte: end, $gte: start } }).populate('user');
-        if (dateFind.length == 0) {
-            req.flash('info', '查無資料')
-            res.redirect('/order')
-        } else {
+        if (req.body.date != "" && req.body.store == 0) { //日期查詢
+            let start = new Date(req.body.date)
+            start.setHours(0, 0, 0, 0)
+            let end = new Date(req.body.date)
+            end.setHours(23, 59, 59, 999)
+            let dateFind = await Order.find({ date: { $lte: end, $gte: start } }).populate('user');
+            if (dateFind.length == 0) {
+                req.flash('info', '查無資料')
+                res.redirect('/order')
+            } else {
+                res.render('../views/order.html', {
+                    orders: dateFind,
+                    title: "訂單管理",
+                    date: new Date(req.body.date).getFullYear() + "/" + (new Date(req.body.date).getMonth() + 1) + "/" + new Date(req.body.date).getDate()
+                })
+            }
+        } else if (req.body.date == "" && req.body.store != 0) { //門市查詢
+            let storeId = await Store.find({ name: req.body.store })
+            let storeFind = await Order.find({ store: storeId[0]._id }).populate('user')
+            if (storeFind.length == 0) {
+                req.flash('info', '查無資料')
+                res.redirect('/order')
+            } else {
+                res.render('../views/order.html', {
+                    orders: storeFind,
+                    store: req.body.store,
+                    title: "訂單管理"
+                })
+            }
+        } else if (req.body.date != "" && req.body.store != 0) {
+            let start = new Date(req.body.date)
+            start.setHours(0, 0, 0, 0)
+            let end = new Date(req.body.date)
+            end.setHours(23, 59, 59, 999)
+            var list = []
+            var check = []
+            let storeId = await Store.findOne({ name: req.body.store })
+            let Find = await Order.find({ date: { $lte: end, $gte: start }, store: storeId.id }).populate('user');
+            for (i = 0; i <= storeId.endAt - storeId.startAt-storeId.bookingBlock; i += Number(storeId.bookingBlock)) {
+                list.push(i)
+                var orderList = await Order.find({
+                    store: storeId._id,
+                    date: { $lte: end, $gte: start },
+                    startAt: String(Number(storeId.startAt) + i),
+                    endAt: String(Number(storeId.startAt) + i + Number(storeId.bookingBlock)),
+                    cancel: false
+                });
+                check.push(orderList.length)
+            }
             res.render('../views/order.html', {
-                orders: dateFind,
+                orders: Find,
+                list:list,
+                storeLists: storeId,
                 title: "訂單管理",
-                date: new Date(req.body.date).getFullYear() + "/" + (new Date(req.body.date).getMonth() + 1) + "/" + new Date(req.body.date).getDate()
+                check:check,
+                prompt: req.body.store + new Date(req.body.date).getFullYear() + "/" + (new Date(req.body.date).getMonth() + 1) + "/" + new Date(req.body.date).getDate()
             })
+        } else {
+            req.flash('info', '請選擇日期或門市')
+            res.redirect('/order/date')
         }
     }))
 
