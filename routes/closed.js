@@ -3,7 +3,7 @@ const wrap = require('../lib/async-wrapper')
 
 module.exports = function(app) {
     app.get('/closed', wrap(async(req, res, next) => {
-        var closed = await Closed.find({}).sort('date')
+        var closed = await Closed.find({}).sort({date:-1})
         res.render('../views/closed.html', { title: '店休設定', infoMessages: req.flash('info'), closed: closed })
     }))
 

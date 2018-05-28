@@ -94,7 +94,7 @@ module.exports = function(app) {
                     title: "訂單管理"
                 })
             }
-        } else if (req.body.date != "" && req.body.store != 0) {
+        } else if (req.body.date != "" && req.body.store != 0) { // 門市+日期
             let start = new Date(req.body.date)
             start.setHours(0, 0, 0, 0)
             let end = new Date(req.body.date)
@@ -103,7 +103,7 @@ module.exports = function(app) {
             var check = []
             let storeId = await Store.findOne({ name: req.body.store })
             let Find = await Order.find({ date: { $lte: end, $gte: start }, store: storeId.id }).populate('user');
-            for (i = 0; i <= storeId.endAt - storeId.startAt-storeId.bookingBlock; i += Number(storeId.bookingBlock)) {
+            for (i = 0; i <= storeId.endAt - storeId.startAt - storeId.bookingBlock; i += Number(storeId.bookingBlock)) {
                 list.push(i)
                 var orderList = await Order.find({
                     store: storeId._id,
@@ -116,11 +116,11 @@ module.exports = function(app) {
             }
             res.render('../views/order.html', {
                 orders: Find,
-                list:list,
+                list: list,
                 storeLists: storeId,
                 title: "訂單管理",
-                check:check,
-                prompt: req.body.store + new Date(req.body.date).getFullYear() + "/" + (new Date(req.body.date).getMonth() + 1) + "/" + new Date(req.body.date).getDate()
+                check: check,
+                prompt: new Date(req.body.date).getFullYear() + "/" + (new Date(req.body.date).getMonth() + 1) + "/" + new Date(req.body.date).getDate() + " " + req.body.store
             })
         } else {
             req.flash('info', '請選擇日期或門市')
