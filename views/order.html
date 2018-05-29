@@ -108,7 +108,7 @@
                                 <tr>
                                     <td>{{(storeLists.startAt | float +i | float)|int}}:{{((storeLists.startAt |float - storeLists.startAt | int+(i |float-i|int))|float-(storeLists.startAt |float - storeLists.startAt | int+(i |float-i|int))|int)*6}}0 ~ {{(storeLists.startAt |float + storeLists.bookingBlock | float+i|float)|int}}:{{(((storeLists.startAt |float - (storeLists.startAt | int)+(storeLists.bookingBlock |float -storeLists.bookingBlock |int)+(i|float-i|int)))|float-((storeLists.startAt |float - (storeLists.startAt | int)+(storeLists.bookingBlock |float -storeLists.bookingBlock |int)+(i|float-i|int)))|int) *6}}0
                                     </td>
-                                    <td>
+                                    <td {% if check[j.index0]== storeLists.sameTimeBook %} style="color: red" {% endif %}>
                                         {{check[j.index0]}}/{{storeLists.sameTimeBook}}
                                     </td>
                                 </tr>

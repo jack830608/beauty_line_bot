@@ -103,11 +103,22 @@ app.controller('completeCtrl', function($scope, $routeParams, $http) {
 app.controller('myorderCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
     var URL = 'http://localhost:3000'
+
+    function getLastDay(year, month) {
+        var new_year = year;
+        var new_month = month++;
+        if (month > 12) {
+            new_month -= 12;
+            new_year++;
+        }
+        var new_date = new Date(new_year, new_month, 1);
+        return (new Date(new_date.getTime() - 1000 * 60 * 60 * 24)).getDate();
+    }
     $http.get(URL + "/user/" + userId + '/myorder')
         .then(function(res, req) {
             $scope.orders = res.data
             $scope.DD = new Date()
-
+            $scope.endDate = getLastDay(new Date().getFullYear(), new Date().getMonth() + 1)
         })
     $scope.cancel = function(orderId) { //取得預約網址
         if (confirm("確認取消預約？") == true)

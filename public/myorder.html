@@ -36,20 +36,30 @@ tr:nth-child(even) {
                 <td ng-if="order.note!='undefined'">{{order.note}}</td>
                 <td ng-if="order.note=='undefined'">無</td>
                 <td>{{order.code}}</td>
-                <td> <span ng-if="(DD |date:'yyyy')==(order.date | date:'yyyy')&&
+                <td>
+                    <span ng-if="((DD |date:'yyyy')<(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
+    (DD |date:'MM')<(order.date | date:'MM') &&
+    order.cancel==false)||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
     (DD |date:'MM')==(order.date | date:'MM') &&
     order.cancel==false &&
-    (order.date | date:'dd')>=(DD |date:'dd')" style="color: green">進行中</span>
+    (order.date | date:'dd')>=(DD |date:'dd'))" style="color: green">進行中&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button style="color:black" ng-click="cancel(order.id)" ng-if="
+                    ((DD |date:'yyyy')<(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
+    (DD |date:'MM')<(order.date | date:'MM') &&
+    order.cancel==false 
+    &&
+    (((DD |date:'dd')|int) - endDate) + ((order.date | date:'dd')|int) > 0)
+
+    ||
+    ((DD |date:'yyyy')==(order.date | date:'yyyy')&&
+    (DD |date:'MM')==(order.date | date:'MM') &&
+    order.cancel==false &&
+    (order.date | date:'dd')-(DD |date:'dd')>3)">取消預約</button></span>
                     <span ng-if=" order.cancel==true" style="color: red">取消</span>
-                    <span ng-if="(DD |date:'yyyy')==(order.date | date:'yyyy')&&
+                    <span ng-if="((DD |date:'yyyy')>(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
+    (DD |date:'MM')>(order.date | date:'MM'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
     (DD |date:'MM')==(order.date | date:'MM') &&
     order.cancel==false &&
-    (order.date | date:'dd')<(DD |date:'dd')">已完成</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button ng-click="cancel(order.id)" ng-if="
-    (DD |date:'yyyy')==(order.date | date:'yyyy')&&
-    (DD |date:'MM')==(order.date | date:'MM') &&
-    order.cancel==false &&
-    (order.date | date:'dd')-(DD |date:'dd')>3">取消預約</button>
+    (order.date | date:'dd')<(DD |date:'dd'))">已完成</span>
                 </td>
             </tr>
         </table>

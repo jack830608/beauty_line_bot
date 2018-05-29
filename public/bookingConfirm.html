@@ -1,6 +1,6 @@
 <title>預約確認</title>
 <div ng-controller="confirmCtrl">
-	<div style="border-width:3px;border-style:dashed;padding:5px; width: 20%">
+	<div style="border-width:3px;border-style:dashed;padding:5px; width: 100%; max-width: 500px">
 <h1 align="center">預約確認</h1>
 <h5 align="center">預約日期：{{date}}</h5>
 <h5 align="center">預約時間：{{startAt | int}}:{{(startAt |dot) *6}}0 ~ {{endAt | int}}:{{(endAt |dot) *6}}0</h5>
@@ -9,8 +9,8 @@
 <textarea  ng-model="note" placeholder="備註"style="border-color:black;border-width:1px;border-style:solid; width: 200px ;height:100px " type="text" name="note"></textarea></div>
 <br>
 <div align="center">
-<button ng-click=cancel()>返回</button>
-<button ng-click=complete()>下一步</button></div>
+<button class="btn btn-default" ng-click=cancel()>返回</button>
+<button class="btn btn-success" ng-click=complete()>下一步</button></div>
 </div>
 </div>
 

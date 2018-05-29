@@ -57,6 +57,7 @@ app.directive('myCalendar', function() {
                     var closeDateByMonth = init.closeDateByMonth
                     var closeDateByWeek = init.closeDateByWeek
                     var dayOfBook = init.dayOfBook
+                    var afterBook = init.afterBook
                     var closeByMonth = closeDateByMonth.split(',').map(function(item) {
                         return parseInt(item, 10); //將Srting轉成Array
                     });
@@ -257,6 +258,8 @@ app.directive('myCalendar', function() {
                             // 過濾本月要顯示的課程
                             var currentMonthEvents = []
                             _.map($scope.events, function(e) {
+
+
                                 var sD = new Date(e.date)
                                 sD = new Date(sD.getFullYear(), sD.getMonth(), 1)
                                 sD.setHours(0, 0, 0, 0)
@@ -269,6 +272,7 @@ app.directive('myCalendar', function() {
                                 var selectD = new Date(selectedYear, selectedMonth, 1).setHours(0, 0, 0, 0)
                                 if (selectD >= sD && selectD <= eD) { // 如果所選年月 >= 開始年月則要顯示 && 如有停課日期，則所選年月 <= 停課年月則要顯示
                                     currentMonthEvents.push(e)
+
                                 }
                             })
 
@@ -295,13 +299,32 @@ app.directive('myCalendar', function() {
                                             } else if (selectedMonth != new Date().getMonth()) { //只要不等於本月訂單全部不可以選
                                                 if (new Date().getDate() + dayOfBook > thisMonthEndingDateLimit &&
                                                     selectedMonth == new Date().getMonth() + 1 &&
-                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart
-                                                ) {
-                                                    $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart }
+                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart &&
+                                                    (new Date().getDate() + afterBook) - thisMonthEndingDateLimit <= countDatingStart
+                                                )
+
+                                                {
+                                                    $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
+                                                    _.map(currentMonthEvents, function(e) { // 尋找當月課程是否與當前同天，有的話則紀錄當天有 event
+                                                        var stD = new Date(e.date)
+                                                        var seD = new Date(selectedYear, selectedMonth, countDatingStart)
+                                                        var diff = dateDiffInDays(stD, seD)
+                                                        if (diff == 0 && !e.frequency) { // 臨時課程
+                                                            console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
+                                                            if (countDatingStart - new Date().getDate() > 3) {
+                                                                $scope.datesDisp[i][j]["e"] = true
+                                                            } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][j]["e"] = true } else {
+                                                                $scope.datesDisp[i][j]["e"] = false
+                                                            }
+                                                        }
+                                                    })
                                                 } else { $scope.datesDisp[i][j] = { "type": "wrongMonth", "date": countDatingStart } }
                                             } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                                 console.log('dayOfBook is ' + dayOfBook)
                                                 $scope.datesDisp[i][j] = { "type": "dayOfBook", "date": countDatingStart };
+                                            } else if (new Date().getDate() + afterBook > countDatingStart) { //幾天後可以預約
+                                                console.log('afterBook is ' + afterBook)
+                                                $scope.datesDisp[i][j] = { "type": "afterBook", "date": countDatingStart };
                                             } else {
                                                 $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
                                                 _.map(currentMonthEvents, function(e) {
@@ -311,10 +334,10 @@ app.directive('myCalendar', function() {
                                                     var seD = new Date(selectedYear, selectedMonth, countDatingStart)
                                                     var diff = dateDiffInDays(stD, seD)
                                                     if (diff == 0 && !e.frequency) { // 臨時課程
-                                                        console.log('have a order  ' + countDatingStart);
+                                                        console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
                                                         if (countDatingStart - new Date().getDate() > 3) {
                                                             $scope.datesDisp[i][j]["e"] = true;
-                                                        } else {
+                                                        } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][j]["e"] = true } else {
                                                             $scope.datesDisp[i][j]["e"] = false
                                                         }
                                                     }
@@ -340,11 +363,32 @@ app.directive('myCalendar', function() {
                                             } else if (selectedMonth != new Date().getMonth()) {
                                                 if (new Date().getDate() + dayOfBook > thisMonthEndingDateLimit &&
                                                     selectedMonth == new Date().getMonth() + 1 &&
-                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart
-                                                ) { $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart } } else { $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart } }
+                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart &&
+                                                    (new Date().getDate() + afterBook) - thisMonthEndingDateLimit <= countDatingStart
+
+                                                ) {
+                                                    $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart };
+                                                    _.map(currentMonthEvents, function(e) {
+                                                        var stD = new Date(e.date)
+                                                        var seD = new Date(selectedYear, selectedMonth, countDatingStart)
+                                                        var diff = dateDiffInDays(stD, seD)
+                                                        if (diff == 0 && !e.frequency) { // 臨時課程
+                                                            console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
+                                                            if (countDatingStart - new Date().getDate() > 3) {
+                                                                $scope.datesDisp[i][k]["e"] = true
+                                                            } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][k]["e"] = true } else {
+                                                                $scope.datesDisp[i][k]["e"] = false
+                                                            }
+
+                                                        }
+                                                    })
+                                                } else { $scope.datesDisp[i][k] = { "type": "wrongMonth", "date": countDatingStart } }
                                             } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                                 console.log('dayOfBook is ' + dayOfBook)
                                                 $scope.datesDisp[i][k] = { "type": "dayOfBook", "date": countDatingStart };
+                                            } else if (new Date().getDate() + afterBook > countDatingStart) { //幾天後可以預約
+                                                console.log('afterBook is ' + afterBook)
+                                                $scope.datesDisp[i][k] = { "type": "afterBook", "date": countDatingStart };
                                             } else {
                                                 $scope.datesDisp[i][k] = { "type": "currentMonth", "date": countDatingStart };
                                                 _.map(currentMonthEvents, function(e) { // 尋找當月課程是否與當前同天，有的話則紀錄當天有 event
@@ -352,10 +396,10 @@ app.directive('myCalendar', function() {
                                                     var seD = new Date(selectedYear, selectedMonth, countDatingStart)
                                                     var diff = dateDiffInDays(stD, seD)
                                                     if (diff == 0 && !e.frequency) { // 臨時課程
-                                                        console.log('have a order ' + countDatingStart);
+                                                        console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
                                                         if (countDatingStart - new Date().getDate() > 3) {
                                                             $scope.datesDisp[i][k]["e"] = true
-                                                        } else {
+                                                        } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][k]["e"] = true } else {
                                                             $scope.datesDisp[i][k]["e"] = false
                                                         }
 
@@ -414,7 +458,7 @@ app.directive('myCalendar', function() {
             '         <div class="col">日</div><div class="col">一</div><div class="col">二</div><div class="col">三</div><div class="col">四</div><div class="col">五</div><div class="col">六</div>' +
             '       </div>' +
             '       <div ng-swipe-left="selectedMonthNextClick()" ng-swipe-right="selectedMonthPrevClick()" on-swipe-left="selectedMonthNextClick()" on-swipe-right="selectedMonthPrevClick()" class="row Daysheading DaysDisplay" ng-repeat = "rowVal in datesDisp  track by $index" ng-class="{\'marginTop0\':$first}">' +
-            '         <div class="col date" ng-repeat = "colVal in rowVal  track by $index" ng-class="{\'fadeDateDisp\':(colVal.type == \'oldMonth\' || colVal.type == \'newMonth\') ,\'fadeDate\':(colVal.type == \'today\'|| colVal.type == \'closeWeek\'|| colVal.type == \'dayOfBook\'|| colVal.type == \'closeMonth\'|| colVal.type == \'wrongMonth\'|| colVal.type == \'close\'), \'haveEventBlue\':(colVal.e) ,\'haveEventRed\':(colVal.e==false) ,\'selDate\':(colVal.date == displayDate && colVal.type == \'currentMonth\')}"  ng-click="selectedDateClick(colVal)" >{{colVal.date}}</div> ' +
+            '         <div class="col date" ng-repeat = "colVal in rowVal  track by $index" ng-class="{\'fadeDateDisp\':(colVal.type == \'oldMonth\' || colVal.type == \'newMonth\') ,\'fadeDate\':(colVal.type == \'today\'|| colVal.type == \'closeWeek\'|| colVal.type == \'dayOfBook\'|| colVal.type == \'closeMonth\'|| colVal.type == \'wrongMonth\'|| colVal.type == \'close\'|| colVal.type == \'afterBook\'), \'haveEventBlue\':(colVal.e) ,\'haveEventRed\':(colVal.e==false) ,\'selDate\':(colVal.date == displayDate && colVal.type == \'currentMonth\')}"  ng-click="selectedDateClick(colVal)" >{{colVal.date}}</div> ' +
             '       </div>' +
             '   </div>' +
             '   <div class="calendar_Month" ng-show="UICalendarDisplay.Month">' +

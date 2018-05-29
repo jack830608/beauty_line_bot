@@ -14,7 +14,11 @@ module.exports = function(app) {
     }))
 
     app.get("/user/:id/myorder", wrap(async(req, res, next) => {
-        let orderList = await Order.find({ user: req.params.id }).populate("store").sort('date')
+        let prvMonth=new Date().getFullYear()+"/"+(new Date().getMonth()) +"/"+new Date().getDate()
+        let start = new Date(prvMonth)
+        start.setHours(0, 0, 0, 0)
+        let orderList = await Order.find({ user: req.params.id, date: { $gt: start } }).populate("store").sort({ date: -1 })
+        console.log(orderList)
         res.send(orderList);
     }))
 
