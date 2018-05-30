@@ -1,0 +1,136 @@
+<title>訂單管理</title>
+<script>
+var head = document.getElementsByTagName('head')[0];
+var link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = 'css/ionic.min.css';
+link.media = 'all';
+head.appendChild(link);
+</script>
+<style>
+div.list.courses {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.list.courses a.item {
+    margin-top: 10px;
+    box-shadow: 3px 3px 3px #dddddd;
+}
+
+
+.ionic_Calendar .haveEventBlue::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    background-color: #69b6d5;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ionic_Calendar .haveEventRed::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    background-color: red;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ionic_Calendar .currentDD {
+    border: 1px dashed #69b6d5;
+}
+
+.gray-bg {
+    background-color: gray;
+}
+
+.qrcode {
+    max-width: 70%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.scroll-bar-indicator,
+.scroll-bar,
+.scroll-bar-v {
+    display: none;
+}
+
+.ionic_Calendar div.date {
+    background-color: #fff;
+}
+
+.ionic_Calendar .MonthsDisplay .col {
+    background-color: #fff;
+}
+
+
+
+/*a.item.courseItem {
+    padding-top: 16px
+}
+*/
+
+.form-err {
+    color: red;
+    font-size: 12px;
+}
+
+
+
+/*.item-input {
+    padding-right: 16px;
+}
+*/
+
+.popup {
+    background-color: white !important;
+}
+
+.pull-right {
+    position: absolute;
+    right: 15px;
+    top: 42%;
+}
+
+.spinner svg {
+    width: 28px;
+    height: 28px;
+    stroke: #fff;
+    fill: #999;
+}
+
+.red {
+    color: red !important;
+}
+
+.ionic_Calendar .row {
+    margin-left: 0 !important;
+}
+</style>
+<div ng-controller="adminCalendarCtrl">
+    <admin-calendar display="display" dateformat="'yyyy-MM-dd'"></admin-calendar>
+    <div class="list courses" style="margin-top: -5px;">
+        <a class="item item-avatar courseItem" ng-repeat="course in clickDateCourses | orderBy:[ 'startsAt']" href="#/course/{{course.id}}">
+        <img ng-src="{{course.studio.logoUrl? course.studio.logoUrl : '/img/injiaoyun.png'}}">
+<!--                 <h2>{{course.subject.name}}課</h2> -->
+        <p><i class="icon ion-home" style="color: rgb(255,149,0);"></i> {{course.studio.name}}</p>
+        <p><i class="icon ion-clock" style="color: rgb(0,122,25);"></i> {{course.displayStartsAt}}<span ng-if="course.teacher.phone == user.phone || course.tempTeacher.phone == user.phone" style="padding-left: 35px"><i class="icon ion-person" style="color: #4e66f8;"></i> {{course.students[0].name}}</span></p>
+        <p></p>
+<!--         <i class="icon ion-chevron-right icon-accessory pull-right" style="font-size: 20px; color: #999"></i> -->
+    </a>
+        <!--         <a class="item text-center" ng-hide="clickDateCourses.length" style="color: gray; font-size: 14px">無課程</a> -->
+    </div>
+</div>

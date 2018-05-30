@@ -1,0 +1,69 @@
+<title>預約</title>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    word-break: break-all;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    width: 33%;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+<div ng-controller="adminBookingCtrl">
+    選擇門市：
+    <select id="storeName" style="width: 200px ;height:30px;">
+        <option ng-repeat="storeList in storeLists" value="{{storeList.name}}">{{storeList.name}}</option>
+    </select>
+    <br>
+    <br>
+    <div>
+        <table width="100%" align="center" frame="void" rules="none">
+            <tr>
+                <td valign="top">
+                    <table width="100%">
+                        <tr>
+                            <th>日期</th>
+                            <th>時段</th>
+                            <th>電話</th>
+                        </tr>
+                        
+                        <tr ng-repeat="order in orders">
+                            <td>{{order.date |date:"yyyy"}}年{{order.date |date:"MM"}}月{{order.date |date:"dd"}}日</td>
+                            <td>{{order.startAt | int}}:{{(order.startAt  | dot)*6}}0 ~ {{order.endAt | int}}:{{(order.endAt | dot)*6}}0</td>
+                            <td>{{order.user.phone}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button ng-click="click(order.id)">詳細資料</button>
+                                
+                            </td>
+                        </tr>
+                       
+                    </table>
+                </td>
+                <td valign="top">
+                    <table ng-if="store" width="100%">
+                        <tr>
+                            <th>預約時段</th>
+                            <th>狀態</th>
+                        </tr>
+                        <tr ng-repeat="i in list">
+                            <td>
+                                {{((store.startAt | STN)+i) | int}}:{{(((store.startAt | STN)+i)| dot)*6}}0 ~ {{((store.startAt | STN)+i+(store.bookingBlock | STN) |int)}}:{{(((store.startAt| STN)+i+(store.bookingBlock | STN))|dot) *6}}0</td>
+                            <td style="color: red;" ng-if="check[$index]>=store.sameTimeBook">{{check[$index]}}/{{store.sameTimeBook}}</td>
+                            <td ng-if="check[$index] <store.sameTimeBook ">{{check[$index]}}/{{store.sameTimeBook}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

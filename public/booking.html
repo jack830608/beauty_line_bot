@@ -21,12 +21,13 @@ tr:nth-child(even) {
 }
 </style>
 <div ng-controller="bookingCtrl">
-    <select id="storeName" style="width: 200px ;height:30px">
+    選擇門市：
+    <select id="storeName" style="width: 200px ;height:30px;">
         <option ng-repeat="storeList in storeLists" value="{{storeList.name}}">{{storeList.name}}</option>
     </select>
     <br>
     <br>
-    <div style="overflow: scroll; height: 730px; width: 100%">
+    <div>
         <table ng-if="store">
             <tr>
                 <th>預約時段</th>

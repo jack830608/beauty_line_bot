@@ -153,7 +153,7 @@ module.exports = function(app) {
         await Order.remove({ _id: req.params.id })
         console.log('Delete success!');
         req.flash('info', '訂單刪除成功')
-        res.redirect('/order')
+        res.redirect('/#/admin/calendar')
     }))
 
     app.post('/order/cancel/:id', wrap(async(req, res, next) => {

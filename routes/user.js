@@ -13,12 +13,16 @@ module.exports = function(app) {
         res.send(orderList);
     }))
 
+    app.get("/admin/order", wrap(async(req, res, next) => {
+        let orderList = await Order.find({}).populate("store")
+        res.send(orderList);
+    }))
+
     app.get("/user/:id/myorder", wrap(async(req, res, next) => {
-        let prvMonth=new Date().getFullYear()+"/"+(new Date().getMonth()) +"/"+new Date().getDate()
+        let prvMonth = new Date().getFullYear() + "/" + (new Date().getMonth()) + "/" + new Date().getDate()
         let start = new Date(prvMonth)
         start.setHours(0, 0, 0, 0)
         let orderList = await Order.find({ user: req.params.id, date: { $gt: start } }).populate("store").sort({ date: -1 })
-        console.log(orderList)
         res.send(orderList);
     }))
 
@@ -40,6 +44,7 @@ module.exports = function(app) {
         start.setHours(0, 0, 0, 0)
         var end = new Date(req.params.date)
         end.setHours(23, 59, 59, 999)
+        let order = await Order.find({ date: { $lte: end, $gte: start }, store: storeList[0]._id }).populate('user');
         for (i = 0; i <= storeList[0].endAt - storeList[0].startAt - storeList[0].bookingBlock; i += Number(storeList[0].bookingBlock)) {
             list.push(i)
             var orderList = await Order.find({
@@ -52,17 +57,19 @@ module.exports = function(app) {
             check.push(orderList.length)
 
         }
-        res.send([store, storeList, list, check])
+        res.send([store, storeList, list, check, order])
     }))
 
     app.post("/booking/:store/:date", wrap(async(req, res, next) => {
         var list = []
         var check = []
         var storeList = await Store.find({ name: req.params.store });
+
         var start = new Date(req.params.date)
         start.setHours(0, 0, 0, 0)
         var end = new Date(req.params.date)
         end.setHours(23, 59, 59, 999)
+        var orders = await Order.find({date: { $lte: end, $gte: start }, store: storeList[0]._id }).populate('user')
         for (i = 0; i < storeList[0].endAt - storeList[0].startAt; i += Number(storeList[0].bookingBlock)) {
             list.push(i)
             var orderList = await Order.find({
@@ -75,7 +82,7 @@ module.exports = function(app) {
             check.push(orderList.length)
 
         }
-        res.send([storeList, list, check])
+        res.send([storeList, list, check, orders])
 
     }))
 
@@ -83,6 +90,11 @@ module.exports = function(app) {
         var storeList = await Store.findOne({ name: req.params.store });
         var randomString = crypto.randomBytes(32).toString('base64').substr(0, 6);
         var init = await Init.findOne({});
+        var closed = await Closed.find({});
+        var closedList = [];
+        for (var i = 0; i < closed.length; i++) {
+            closedList.push((new Date(closed[i].date).getFullYear() + '/' + new Date(closed[i].date).getMonth() + '/' + new Date(closed[i].date).getDate()))
+        }
         var orders = await Order.find({
             date: req.params.date,
             store: storeList._id,
@@ -90,7 +102,14 @@ module.exports = function(app) {
             endAt: req.params.endTime,
             cancel: false
         });
-        if (orders.length >= storeList.sameTimeBook) {
+        if (orders.length >= storeList.sameTimeBook) { //預約人數已滿
+            res.send("Error")
+        } else if (new Date(req.params.date).getDay() == init.closeDateByWeek) { //每週固定休假
+            res.send("Error")
+        } else if (init.closeDateByMonth.indexOf(new Date(req.params.date).getDate()) >= 0) { //每月固定休假
+            res.send("Error")
+        } else if (closedList.indexOf((new Date(req.params.date).getFullYear() + '/' + new Date(req.params.date).getMonth() + '/' + new Date(req.params.date).getDate())) >= 0) {
+            //特殊休假
             res.send("Error")
         } else {
             var bookingOrder = await Order.create({

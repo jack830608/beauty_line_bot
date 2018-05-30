@@ -43,9 +43,9 @@ module.exports = function(app) {
             storeId: storeData._id,
             storename: storeData.name,
             storenum: storeData.sameTimeBook,
-            storeStart:storeData.startAt,
-            storeEnd:storeData.endAt,
-            storeBookingBlock:storeData.bookingBlock,
+            storeStart: storeData.startAt,
+            storeEnd: storeData.endAt,
+            storeBookingBlock: storeData.bookingBlock,
             // storeDayOfBook:storeData.dayOfBook,
             // storeCloseDateByMonth: storeData.closeDateByMonth,
             // storeCloseDateByWeekOri: storeData.closeDateByWeek,
@@ -56,7 +56,7 @@ module.exports = function(app) {
     }))
 
     app.post('/store/update/:id', wrap(async(req, res, next) => {
-        let sameName = await Store.findOne({ name: req.body.newname }) ||false
+        let sameName = await Store.findOne({ name: req.body.newname }) || false
         let findStore = await Store.findOne({ _id: req.params.id })
         let query = { name: findStore.name, sameTimeBook: findStore.sameTimeBook };
         let updateData = {
@@ -68,7 +68,7 @@ module.exports = function(app) {
             // dayOfBook: req.body.dayOfBook,
             // closeDateByMonth: req.body.closeDateByMonth,
             // closeDateByWeek: req.body.closeDateByWeek
-        };    
+        };
         if (req.body.newname == "") {
             req.flash('info', '分店名稱不可空白')
             res.redirect('back')

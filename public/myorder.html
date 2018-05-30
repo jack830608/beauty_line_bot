@@ -18,31 +18,38 @@ tr:nth-child(even) {
 }
 </style>
 <div ng-controller="myorderCtrl">
-    <div style="overflow: scroll; height: 790px; width: 100%">
-        <table>
+    <div>
+        <table width="100%" style="table-layout:fixed ">
             <tr>
-                <th style="width: 16.6%;font-weight: bold;">日期</th>
-                <th style="width: 16.6%;font-weight: bold;">時段</th>
-                <th style="width: 16.6%;font-weight: bold;">分店名稱</th>
-                <th style="width: 16.6%;font-weight: bold;">備註</th>
-                <th style="width: 16.6%;font-weight: bold;">預約驗證碼</th>
-                <th style="width: 16.6%;font-weight: bold;">狀態</th>
+                <th style="font-weight: bold; ">日期</th>
+                <th style="font-weight: bold; ">時段</th>
+                <th style="font-weight: bold; ">分店名稱</th>
+<!--                 <th style="font-weight: bold; ">備註</th> -->
+                <th style="font-weight: bold; ">驗證碼</th>
+                <th style="font-weight: bold; ">狀態</th>
+                <th></th>
             </tr>
-            <tr ng-repeat="order in orders">
-                <td>{{order.date | date:'yyyy'}}年{{order.date | date:'MM'}}月{{order.date | date:'dd'}}日</td>
+            <tr ng-repeat="order in orders ">
+                
+                <td>{{order.date | date:'yyyy'}}/{{order.date | date:'MM'}}/{{order.date | date:'dd'}}</td>
                 <td>{{order.startAt | int}}:{{(order.startAt | dot)*6}}0 ~ {{order.endAt | int}}:{{(order.endAt | dot)*6}}0</td>
                 <td>{{order.store.name}}
                 </td>
-                <td ng-if="order.note!='undefined'">{{order.note}}</td>
-                <td ng-if="order.note=='undefined'">無</td>
+<!--                 <td ng-if="order.note!='undefined' ">{{order.note}}</td>
+                <td ng-if="order.note=='undefined' ">無</td> -->
                 <td>{{order.code}}</td>
                 <td>
-                    <span ng-if="((DD |date:'yyyy')<(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
-    (DD |date:'MM')<(order.date | date:'MM') &&
-    order.cancel==false)||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
+                    <span ng-if="((DD |date: 'yyyy')<(order.date | date: 'yyyy'))||((DD |date: 'yyyy')==(order.date | date: 'yyyy')&& (DD |date: 'MM')<(order.date | date: 'MM') && order.cancel==false)||((DD |date: 'yyyy')==(order.date | date: 'yyyy')&& (DD |date: 'MM')==(order.date | date: 'MM') && order.cancel==false && (order.date | date: 'dd')>=(DD |date:'dd'))" style="color: green">進行中<br>
+        </span>
+                    <span ng-if=" order.cancel==true" style="color: red">取消</span>
+                    <span ng-if="((DD |date:'yyyy')>(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
+    (DD |date:'MM')>(order.date | date:'MM'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
     (DD |date:'MM')==(order.date | date:'MM') &&
     order.cancel==false &&
-    (order.date | date:'dd')>=(DD |date:'dd'))" style="color: green">進行中&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button style="color:black" ng-click="cancel(order.id)" ng-if="
+    (order.date | date:'dd')<(DD |date:'dd'))">已完成</span>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" ng-click="cancel(order.id)" ng-if="
                     ((DD |date:'yyyy')<(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
     (DD |date:'MM')<(order.date | date:'MM') &&
     order.cancel==false 
@@ -53,13 +60,8 @@ tr:nth-child(even) {
     ((DD |date:'yyyy')==(order.date | date:'yyyy')&&
     (DD |date:'MM')==(order.date | date:'MM') &&
     order.cancel==false &&
-    (order.date | date:'dd')-(DD |date:'dd')>3)">取消預約</button></span>
-                    <span ng-if=" order.cancel==true" style="color: red">取消</span>
-                    <span ng-if="((DD |date:'yyyy')>(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
-    (DD |date:'MM')>(order.date | date:'MM'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&
-    (DD |date:'MM')==(order.date | date:'MM') &&
-    order.cancel==false &&
-    (order.date | date:'dd')<(DD |date:'dd'))">已完成</span>
+    (order.date | date:'dd')-(DD |date:'dd')>3)">取消</button>
+</td>
                 </td>
             </tr>
         </table>

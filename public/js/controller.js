@@ -17,6 +17,23 @@ app.controller('calendarCtrl', function($scope, $routeParams, $http) {
 
 });
 
+app.controller('adminCalendarCtrl', function($scope, $routeParams, $http) {
+    var URL = 'http://localhost:3000'
+    $http.get(URL + "/admin/order")
+        .then(function(res, req) {
+            $scope.$broadcast('loadEvents', res.data)
+            $http.get(URL + "/init" + '/list')
+                .then(function(res, req) {
+                    $scope.$broadcast('initList', res.data)
+                    $http.get(URL + "/closed" + '/list')
+                        .then(function(res, req) {
+                            $scope.$broadcast('closedList', res.data)
+                        })
+                })
+        })
+
+});
+
 app.controller('bookingCtrl', function($scope, $routeParams, $http) {
     var date = $routeParams.date;
     var userId = $routeParams.userId;
@@ -55,6 +72,48 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
 
 });
 
+
+app.controller('adminBookingCtrl', function($scope, $routeParams, $http) {
+    var date = $routeParams.date;
+    var userId = $routeParams.userId;
+    var URL = 'http://localhost:3000'
+    $http.get(URL + "/user/" + date + '/booking')
+        .then(function(res, req) {
+            $scope.storeLists = res.data[0]
+            $scope.store = res.data[1][0]
+            $scope.list = res.data[2]
+            $scope.check = res.data[3]
+            $scope.orders = res.data[4]
+            $scope.date = date
+        })
+
+
+
+    $(document).ready(function() { //選定下拉式選單
+        $('#storeName').change(function() {
+            var store = $(this).find("option:selected").attr('value')
+
+            function gototime() {
+                $http.post(URL + "/booking/" + store + "/" + date)
+                    .then(function(res, req) {
+
+                        $scope.store = res.data[0][0]
+                        $scope.list = res.data[1]
+                        $scope.check = res.data[2]
+                        $scope.orders = res.data[3]
+                    })
+            }
+            gototime()
+        });
+    });
+
+    $scope.click = function(a) { //取得預約網址
+        console.log(a)
+        window.open(URL + '/order/details/' + a, "_self")
+    }
+
+});
+
 app.controller('confirmCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId
     var start = $routeParams.startTime;
@@ -74,8 +133,8 @@ app.controller('confirmCtrl', function($scope, $routeParams, $http) {
         $http.post(URL + "/booking/" + userId + "/" + date + "/" + start + "/" + end + "/" + store + "/" + $scope.note)
             .then(function(res, req) {
                 if (res.data == "Error") {
-                    alert('此時段預約已滿')
-                    window.open(URL + "/#/booking/" + userId + "/" + date, "_self")
+                    alert('此時段不可預約')
+                    window.open(URL + "/#/calendar/" + userId, "_self")
                 } else {
                     $scope.OrderId = res.data
                     window.open(URL + "/#/booking/" + $scope.OrderId, "_self")

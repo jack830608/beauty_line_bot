@@ -28,7 +28,7 @@
             return false;
     }
     </script>
-    <div id="wrapper">
+   <!--  <div id="wrapper">
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
@@ -53,12 +53,12 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a>
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">---</a> -->
                 <br>
                 <br>
-                <h1 style="display: inline">訂單明細</h1>
+                <h2 style="display: inline">訂單明細</h2>
                 <br>
-                <div style="position:absolute;right:56%">狀態： {% if status == 1 %} <span style="color: red">取消</span> {% elif status == 0 %} <span style="color: black">已完成</span> {% else %} <span style="color: green">進行中</span> {% endif %}
+                <div style="position:absolute;right:60%">狀態： {% if status == 1 %} <span style="color: red">取消</span> {% elif status == 0 %} <span style="color: black">已完成</span> {% else %} <span style="color: green">進行中</span> {% endif %}
                 </div>
                 <span style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ;position:absolute;right:0">{{infoMessages}}</span>
                 <br>------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@
                 <br>------------------------------------------------------------------------------------
                 <br>
                 <br>
-                <div style="position:absolute;right:55%">
+                <div style="position:absolute;right:58%">
                     {% if dataDetail.cancel == false and status !==0 %}
                     <form action="/order/cancel/{{dataDetail._id}}" method="POST" style="color: black;display:inline" onSubmit="return CheckCancel();">
                         <button type="submit">取消預約</button>
@@ -92,12 +92,12 @@
             </div>
         </div>
     </div>
-    <script>
+<!--     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
-    </script>
+    </script> -->
     </script>
 </body>
 
