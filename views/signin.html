@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>登錄</title>
-</head>
-<body style="background-color: white">
-	<h1 style="font-family: 微軟正黑體">登入</h1>
-	<br>
-	<div align="right" style="font-size: 30px ;color:red ;font-family: 微軟正黑體 ">{{errorMessages}}</div>
-	<form action="/admin/signin" method="POST" style="font-family: 微軟正黑體">
-		帳號 : <input type="text" name="username"> <br>
-		密碼 : <input type="password" name="password"> <br>
-		<br>
-		<button type="submit">確認</button>
-	</form>
 
+<head>
+    <meta charset="UTF-8">
+    <title>登錄</title>
+</head>
+
+<body style="background-color: white">
+    <h1 style="font-family: 微軟正黑體">登入</h1>
+    <br>
+    <form action="/admin/signin" method="POST" style="font-family: 微軟正黑體">
+        帳號 :
+        <input type="text" name="username"><span style="color: red">{{ errorMessages }}</span>
+        <br> 密碼 :
+        <input type="password" name="password">
+        <br>
+        <br>
+        <button type="submit">確認</button>
+    </form>
 </body>
+
 </html>

@@ -7,42 +7,47 @@ const Store = require('../models/store')
 
 module.exports = function(app) {
     app.get("/order", wrap(async(req, res, next) => {
-        if (req.query.search_query) {
-            var findName = await User.find({ name: req.query.search_query })
-            var findPhone = await User.find({ phone: req.query.search_query })
-            var findData = await Order.find({ code: req.query.search_query }).populate('user')
-            if (findName.length !== 0) {
-                var arr = []
-                for (i = 0; i < findName.length; i++) {
-                    var findData = await Order.find({ user: findName[i]._id }).populate('user').sort('date')
-                    arr.push(findData)
-                }
-                res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
-            } else if (findPhone.length !== 0) {
-                var arr = []
-                for (i = 0; i < findPhone.length; i++) {
-                    var findData = await Order.find({ user: findPhone[i]._id }).populate('user').sort('date')
-                    arr.push(findData)
-                }
-                res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
-            } else if (findData.length !== 0) {
-                res.render('../views/order.html', { orders: findData, title: "訂單管理" })
-            } else if (findData.length == 0 && findName.length == 0) {
-                req.flash('info', '查無資料')
-                res.redirect('/order')
-            }
-        } else {
+        if (req.session.admin) {
+            // if (req.query.search_query) {
+            //     var findName = await User.find({ name: req.query.search_query })
+            //     var findPhone = await User.find({ phone: req.query.search_query })
+            //     var findData = await Order.find({ code: req.query.search_query }).populate('user')
+            //     if (findName.length !== 0) {
+            //         var arr = []
+            //         for (i = 0; i < findName.length; i++) {
+            //             var findData = await Order.find({ user: findName[i]._id }).populate('user').sort('date')
+            //             arr.push(findData)
+            //         }
+            //         res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
+            //     } else if (findPhone.length !== 0) {
+            //         var arr = []
+            //         for (i = 0; i < findPhone.length; i++) {
+            //             var findData = await Order.find({ user: findPhone[i]._id }).populate('user').sort('date')
+            //             arr.push(findData)
+            //         }
+            //         res.render('../views/order.html', { orders: arr[0], title: "訂單管理" })
+            //     } else if (findData.length !== 0) {
+            //         res.render('../views/order.html', { orders: findData, title: "訂單管理" })
+            //     } else if (findData.length == 0 && findName.length == 0) {
+            //         req.flash('info', '查無資料')
+            //         res.redirect('/order')
+            //     }
+            // } else {
             let orderList = await Order.find({ date: { $gte: new Date().setHours(0, 0, 0, 0) } }).populate('user').sort('date')
             res.render('../views/order.html', {
-                orders: orderList,
-                infoMessages: req.flash('info'),
+                // orders: orderList,
+                // infoMessages: req.flash('info'),
                 title: "訂單管理"
             })
+            // }
+        } else {
+            req.flash('err', '請先登錄')
+            res.redirect('/admin/signin')
         }
     }))
 
     app.post('/order', wrap(async(req, res, next) => {
-        let randomString = crypto.randomBytes(32).toString('base64').substr(0, 6);
+        let randomString = crypto.randomBytes(64).toString('hex').substr(0, 5);
         let data = req.body;
         Order.create({
             date: data.date,
@@ -150,10 +155,14 @@ module.exports = function(app) {
     }))
 
     app.post('/order/delete/:id', wrap(async(req, res, next) => {
+        var orders = await Order.findOne({ _id: req.params.id })
+        var date = new Date(orders.date).getFullYear() + "-" + (new Date(orders.date).getMonth() + 1) + "-" + new Date(orders.date).getDate()
         await Order.remove({ _id: req.params.id })
+
+        console.log(date)
         console.log('Delete success!');
-        req.flash('info', '訂單刪除成功')
-        res.redirect('/#/admin/calendar')
+        // req.flash('info', '訂單刪除成功')
+        res.redirect('/#/admin/booking/' + date)
     }))
 
     app.post('/order/cancel/:id', wrap(async(req, res, next) => {
@@ -176,6 +185,66 @@ module.exports = function(app) {
         } else {
             res.render('../views/order.html', { orders: findData, title: "訂單管理" })
         }
+    }))
+
+    app.get("/order/:date/booking", wrap(async(req, res, next) => {
+        let store = await Store.find();
+        var list = []
+        var check = []
+        var storeList = await Store.find({ name: store[0].name });
+        var start = new Date(req.params.date)
+        start.setHours(0, 0, 0, 0)
+        var end = new Date(req.params.date)
+        end.setHours(23, 59, 59, 999)
+        let order = await Order.find({ date: { $lte: end, $gte: start }, store: storeList[0]._id }).populate('user').sort({startAt:1});
+        for (i = 0; i <= storeList[0].endAt - storeList[0].startAt - storeList[0].bookingBlock; i += Number(storeList[0].bookingBlock)) {
+            list.push(i)
+            var orderList = await Order.find({
+                store: storeList[0]._id,
+                date: { $lte: end, $gte: start },
+                startAt: String(Number(storeList[0].startAt) + i),
+                endAt: String(Number(storeList[0].startAt) + i + Number(storeList[0].bookingBlock)),
+                cancel: false
+            });
+            check.push(orderList.length)
+
+        }
+        res.send([store, storeList, list, check, order])
+    }))
+
+    app.post("/order/search/:store/:text/:date", wrap(async(req, res, next) => {
+        let store = req.params.store
+        let text = req.params.text
+        let date = req.params.date
+        let start = new Date(date)
+        start.setHours(0, 0, 0, 0)
+        let end = new Date(date)
+        end.setHours(23, 59, 59, 999)
+        var findStore = await Store.findOne({ name: store })
+        var findName = await User.find({ name: text })
+        var findPhone = await User.find({ phone: text })
+        var findData = await Order.find({ code: text, store: findStore._id, date: { $lte: end, $gte: start } }).populate('user')
+        if (findName.length != 0) {
+            var arr = []
+            for (i = 0; i < findName.length; i++) {
+                var findData = await Order.find({ user: findName[i]._id, store: findStore._id, date: { $lte: end, $gte: start } }).populate('user').sort('startAt')
+                arr.push(findData)
+            }
+            if (findData.length != 0) { res.send(findData) } else { res.send('error') }
+
+        } else if (findPhone.length != 0) {
+            var arr = []
+            for (i = 0; i < findPhone.length; i++) {
+                var findData = await Order.find({ user: findPhone[i]._id, store: findStore._id, date: { $lte: end, $gte: start } }).populate('user').sort('startAt')
+                arr.push(findData)
+            }
+            if (findData.length != 0) { res.send(findData) } else { res.send('error') }
+        } else if (findData.length != 0) {
+            res.send(findData)
+        } else {
+            res.send('error')
+        }
+
     }))
 
 }

@@ -1,6 +1,7 @@
 app.controller('calendarCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
-    var URL = 'http://localhost:3000'
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
 
     $http.get(URL + "/user/" + userId + '/order')
         .then(function(res, req) {
@@ -18,7 +19,8 @@ app.controller('calendarCtrl', function($scope, $routeParams, $http) {
 });
 
 app.controller('adminCalendarCtrl', function($scope, $routeParams, $http) {
-    var URL = 'http://localhost:3000'
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
     $http.get(URL + "/admin/order")
         .then(function(res, req) {
             $scope.$broadcast('loadEvents', res.data)
@@ -37,7 +39,8 @@ app.controller('adminCalendarCtrl', function($scope, $routeParams, $http) {
 app.controller('bookingCtrl', function($scope, $routeParams, $http) {
     var date = $routeParams.date;
     var userId = $routeParams.userId;
-    var URL = 'http://localhost:3000'
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
     $http.get(URL + "/user/" + date + '/booking')
         .then(function(res, req) {
             $scope.storeLists = res.data[0]
@@ -46,8 +49,6 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
             $scope.check = res.data[3]
             $scope.date = date
         })
-
-
 
     $(document).ready(function() { //選定下拉式選單
         $('#storeName').change(function() {
@@ -64,20 +65,18 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
             gototime()
         });
     });
-
     $scope.click = function(a, b, c) { //取得預約網址
         window.open(URL + "/#/booking/" + userId + "/" + date + '/' + a + '/' + b + '/' + c, "_self")
     }
-
-
 });
 
 
 app.controller('adminBookingCtrl', function($scope, $routeParams, $http) {
     var date = $routeParams.date;
     var userId = $routeParams.userId;
-    var URL = 'http://localhost:3000'
-    $http.get(URL + "/user/" + date + '/booking')
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
+    $http.get(URL + "/order/" + date + '/booking')
         .then(function(res, req) {
             $scope.storeLists = res.data[0]
             $scope.store = res.data[1][0]
@@ -85,6 +84,7 @@ app.controller('adminBookingCtrl', function($scope, $routeParams, $http) {
             $scope.check = res.data[3]
             $scope.orders = res.data[4]
             $scope.date = date
+            $scope.form = { type: $scope.storeLists[0].name };
         })
 
 
@@ -101,6 +101,7 @@ app.controller('adminBookingCtrl', function($scope, $routeParams, $http) {
                         $scope.list = res.data[1]
                         $scope.check = res.data[2]
                         $scope.orders = res.data[3]
+
                     })
             }
             gototime()
@@ -108,10 +109,21 @@ app.controller('adminBookingCtrl', function($scope, $routeParams, $http) {
     });
 
     $scope.click = function(a) { //取得預約網址
-        console.log(a)
         window.open(URL + '/order/details/' + a, "_self")
     }
 
+    $scope.find = function() {
+        $http.post(URL + "/order/search/" + $scope.form.type + "/" + $scope.search + "/" + date)
+            .then(function(res, req) {
+                if (res.data == 'error') {
+                    alert("查無此訂單")
+                    $scope.search = ""
+                } else {
+                    $scope.orders = res.data
+                    $scope.search = ""
+                }
+            })
+    }
 });
 
 app.controller('confirmCtrl', function($scope, $routeParams, $http) {
@@ -120,7 +132,8 @@ app.controller('confirmCtrl', function($scope, $routeParams, $http) {
     var end = $routeParams.endTime;
     var date = $routeParams.date;
     var store = $routeParams.store;
-    var URL = 'http://localhost:3000'
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
     $scope.startAt = start
     $scope.endAt = end
     $scope.date = date
@@ -146,7 +159,8 @@ app.controller('confirmCtrl', function($scope, $routeParams, $http) {
 
 app.controller('completeCtrl', function($scope, $routeParams, $http) {
     var userOrder = $routeParams.userOrder;
-    var URL = 'http://localhost:3000'
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
     $http.get(URL + "/booking/" + userOrder + '/order')
         .then(function(res, req) {
             $scope.startAt = res.data.startAt;
@@ -158,10 +172,10 @@ app.controller('completeCtrl', function($scope, $routeParams, $http) {
         })
 });
 
-
 app.controller('myorderCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
-    var URL = 'http://localhost:3000'
+    // var URL = 'http://localhost:3000'
+    var URL = 'http://968c7c95.ngrok.io'
 
     function getLastDay(year, month) {
         var new_year = year;

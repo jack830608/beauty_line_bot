@@ -5,7 +5,10 @@ var app = angular.module('app', ['ngRoute', 'swipe'], function($routeProvider) {
     $routeProvider.when('/admin/calendar', {
         templateUrl: 'adminCalendar.html'
     });
-    $routeProvider.when('/booking/:date', {
+    $routeProvider.when('/booking/:userId/:date', {
+        templateUrl: 'Booking.html'
+    });
+    $routeProvider.when('/admin/booking/:date', {
         templateUrl: 'adminBooking.html'
     });
     $routeProvider.when('/booking/:userId/:date/:startTime/:endTime/:store', {

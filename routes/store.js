@@ -2,16 +2,21 @@ const Store = require('../models/store')
 const wrap = require('../lib/async-wrapper')
 module.exports = function(app) {
     app.get('/store', wrap(async(req, res, next) => {
-        let storeList = await Store.find({})
-        if (storeList.length == 0) {
-            req.flash('info', '請新增門市')
-            res.render('../views/stores.html', { infoMessages: req.flash('info'), title: '門市管理' })
+        if (req.session.admin) {
+            let storeList = await Store.find({})
+            if (storeList.length == 0) {
+                req.flash('info', '請新增門市')
+                res.render('../views/stores.html', { infoMessages: req.flash('info'), title: '門市管理' })
+            } else {
+                res.render('../views/stores.html', {
+                    infoMessages: req.flash('info'),
+                    stores: storeList,
+                    title: '門市管理'
+                })
+            }
         } else {
-            res.render('../views/stores.html', {
-                infoMessages: req.flash('info'),
-                stores: storeList,
-                title: '門市管理'
-            })
+            req.flash('err', '請先登錄')
+            res.redirect('/admin/signin')
         }
     }))
 

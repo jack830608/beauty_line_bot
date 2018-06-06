@@ -17,8 +17,10 @@ module.exports = function(app) {
     app.post('/admin/signin', wrap(async(req, res, next) => {
         let pass = await Admin.findOne({ username: req.body.username, password: md5(req.body.password) })
         if (pass) {
-            res.redirect('/order')
+            req.session.admin = true;
+            res.redirect('/store')
         } else {
+            req.flash('err', '帳號&密碼錯誤')
             res.redirect('back')
         }
     }))
@@ -34,7 +36,7 @@ module.exports = function(app) {
         } else {
             let exist = await Admin.findOne({ username: req.body.username })
             if (exist) {
-                req.flash('err', '此帳號已使用,請重新輸入')
+                req.flash('err', '此帳號已被使用,請重新輸入')
                 res.redirect('/admin/signup')
             } else if (req.body.password !== req.body.password2) {
                 req.flash('err', '密碼錯誤,請重新輸入!')

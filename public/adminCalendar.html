@@ -121,6 +121,8 @@ div.list.courses a.item {
 }
 </style>
 <div ng-controller="adminCalendarCtrl">
+    <br>
+    <br>
     <admin-calendar display="display" dateformat="'yyyy-MM-dd'"></admin-calendar>
     <div class="list courses" style="margin-top: -5px;">
         <a class="item item-avatar courseItem" ng-repeat="course in clickDateCourses | orderBy:[ 'startsAt']" href="#/course/{{course.id}}">

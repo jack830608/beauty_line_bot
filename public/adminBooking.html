@@ -21,12 +21,18 @@ tr:nth-child(even) {
 }
 </style>
 <div ng-controller="adminBookingCtrl">
-    選擇門市：
-    <select id="storeName" style="width: 200px ;height:30px;">
+    <br>
+    <br>選擇門市：
+    <select ng-model="form.type" id="storeName" style="width: 200px ;height:30px;">
         <option ng-repeat="storeList in storeLists" value="{{storeList.name}}">{{storeList.name}}</option>
-    </select>
-    <br>
-    <br>
+    </select> &nbsp;&nbsp;
+    <span style="color:red" style="position: relative">{{date}}</span>
+    <span style="position: relative ;left:83% ; top:-35px">
+    <form ng-submit="find()"  autocomplete="off">
+        <img src="images/big.jpeg" width="2%" height="1.5%" style="display: inline";>
+        <input ng-model="search" type="text" name="search_query" placeholder="電話、姓名、預約驗證碼"  style="width: 200px;display: inline">
+    </form>
+    </span>
     <div>
         <table width="100%" align="center" frame="void" rules="none">
             <tr>
@@ -37,16 +43,22 @@ tr:nth-child(even) {
                             <th>時段</th>
                             <th>電話</th>
                         </tr>
-                        
-                        <tr ng-repeat="order in orders">
+                        <tr ng-if="order.startAt<10" ng-repeat="order in orders"> 
+                            <!-- 畫小於10點的 -->
                             <td>{{order.date |date:"yyyy"}}年{{order.date |date:"MM"}}月{{order.date |date:"dd"}}日</td>
-                            <td>{{order.startAt | int}}:{{(order.startAt  | dot)*6}}0 ~ {{order.endAt | int}}:{{(order.endAt | dot)*6}}0</td>
-                            <td>{{order.user.phone}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button ng-click="click(order.id)">詳細資料</button>
-                                
+                            <td>{{order.startAt | int}}:{{(order.startAt | dot)*6}}0 ~ {{order.endAt | int}}:{{(order.endAt | dot)*6}}0</td>
+                            <td>{{order.user.phone}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button ng-click="click(order.id)" class="btn btn-default btn-sm">詳細資料</button>
                             </td>
                         </tr>
-                       
+                        <tr ng-if="order.startAt>=10" ng-repeat="order in orders">
+                            <!-- 畫大於10點的 -->
+                            <td>{{order.date |date:"yyyy"}}年{{order.date |date:"MM"}}月{{order.date |date:"dd"}}日</td>
+                            <td>{{order.startAt | int}}:{{(order.startAt | dot)*6}}0 ~ {{order.endAt | int}}:{{(order.endAt | dot)*6}}0</td>
+                            <td>{{order.user.phone}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button ng-click="click(order.id)" class="btn btn-default btn-sm">詳細資料</button>
+                            </td>
+                        </tr>
                     </table>
                 </td>
                 <td valign="top">

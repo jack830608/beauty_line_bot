@@ -3,13 +3,18 @@ const wrap = require('../lib/async-wrapper')
 module.exports = function(app) {
 
     app.get('/init', wrap(async(req, res, next) => {
-        let initList = await Init.findOne({})
-        let week = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "無"]
-        if (initList == null) {
-            res.render('../views/init.html', { title: '初始化修改', infoMessages: req.flash('info') })
-        } else {
-            res.render('../views/init.html', { title: '初始化修改', init: initList, weeks: week[initList.closeDateByWeek], infoMessages: req.flash('info') })
+        if (req.session.admin) {
+            let initList = await Init.findOne({})
+            let week = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "無"]
+            if (initList == null) {
+                res.render('../views/init.html', { title: '初始化修改', infoMessages: req.flash('info') })
+            } else {
+                res.render('../views/init.html', { title: '初始化修改', init: initList, weeks: week[initList.closeDateByWeek], infoMessages: req.flash('info') })
 
+            }
+        } else {
+            req.flash('err', '請先登錄')
+            res.redirect('/admin/signin')
         }
     }))
 
