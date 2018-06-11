@@ -17,7 +17,7 @@ bot.on('follow', function(event) {
 
 
 bot.on('message', async function(event) {
-    var URL = 'http://6545ba54.ngrok.io'
+    var URL = 'http://128.199.249.93'
     let lengthIs10 = String(event.message.text).length
     let onlyNumber = /^\d+$/.test(event.message.text)
     let lineId = event.source.userId
