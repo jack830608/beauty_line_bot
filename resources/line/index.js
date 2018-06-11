@@ -17,6 +17,7 @@ bot.on('follow', function(event) {
 
 
 bot.on('message', async function(event) {
+    var URL = 'http://6545ba54.ngrok.io'
     let lengthIs10 = String(event.message.text).length
     let onlyNumber = /^\d+$/.test(event.message.text)
     let lineId = event.source.userId
@@ -47,7 +48,7 @@ bot.on('message', async function(event) {
                 console.log('success reply')
             })
         } else {
-            event.reply('http://968c7c95.ngrok.io/#/myorder/' + user[0]._id).then(function() {
+            event.reply(URL + '/#/myorder/' + user[0]._id).then(function() {
                 console.log('success reply')
             })
         }
@@ -61,9 +62,29 @@ bot.on('message', async function(event) {
                 console.log('success reply')
             })
         } else {
-            event.reply('http://968c7c95.ngrok.io/#/calendar/' + user[0]._id).then(function() {
+            event.reply(URL + '/#/calendar/' + user[0]._id).then(function() {
                 console.log('success reply')
             })
+        }
+    } else if (event.message.text == "修改個人資料") {
+        event.reply('若要修改使用者名稱或手機號碼請在新的名稱或電話前加上“#”                                   範例:                                   王大明 ->王小明 0912345678 -> 0987654321                        修改名稱:    #王小明            修改電話:    #0987654321').then(function() {
+            console.log('success reply')
+        })
+    } else if (event.message.text.indexOf("#") >= 0) {
+        let data = event.message.text.slice(1)
+        let lengthIs10 = String(data).length
+        let onlyNumber = /^\d+$/.test(data)
+        if ((lengthIs10 == 10) && onlyNumber) {
+            await User.findOneAndUpdate({ lineId: lineId }, { phone: data })
+            event.reply('手機號碼修改成功！').then(function() {
+                console.log('modify user phone success')
+            })
+        } else {
+            await User.findOneAndUpdate({ lineId: lineId }, { name: data })
+            event.reply('使用者名稱修改成功！').then(function() {
+                console.log('modify user name success')
+            })
+
         }
     }
 
