@@ -203,7 +203,7 @@ app.directive('adminCalendar', function() {
                                 selectedYear = mnthDate.getFullYear();
                                 $scope.displayMonthCalendar();
                             } else if (date.type == 'currentMonth') {
-                                window.open("http://6545ba54.ngrok.io/#/admin/booking/"  + d, "_self")
+                                window.open("http://128.199.249.93/#/admin/booking/"  + d, "_self")
                             }
                             $scope.displayCompleteDate();
                         }
