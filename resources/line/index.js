@@ -91,9 +91,10 @@ bot.on('message', async function(event) {
 
 });
 
-router.post('/webhook', linebotParser)
-// router.post('/webhook', function(){
+// router.post('/webhook', linebotParser)
+router.post('/webhook', function(res,req){
+    res.send('line')
 
-// })
+})
 
 module.exports = router
