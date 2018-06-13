@@ -8,8 +8,12 @@ var bot = linebot({
     channelAccessToken: 'Li0ua8fkIwKgTdFfSkij2O1R7f6rnOg9dk7pjzDx1nDddBkIcIKC8uSsfVHtxI3uXB+2+QWDGA2XssRa2AZOCfdCghqzo4TYpD1hF+tP2bZemS4f1LOHbShHQrKruK6jxhaXz0SzBKg2RlrcAdPlDgdB04t89/1O/w1cDnyilFU='
 });
 
-let router = express.Router()
+const router = express.Router()
 const linebotParser = bot.parser()
+router.post('/webhook', linebotParser)
+// router.post('/webhook', function(res, req) {
+//     res.send('line')
+// })
 
 bot.on('follow', function(event) {
     event.reply('您好,請輸入您的名字');
@@ -91,10 +95,6 @@ bot.on('message', async function(event) {
 
 });
 
-// router.post('/webhook', linebotParser)
-router.post('/webhook', function(res,req){
-    res.send('line')
 
-})
 
 module.exports = router
