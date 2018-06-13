@@ -1,5 +1,6 @@
 const Store = require('../models/store')
 const wrap = require('../lib/async-wrapper')
+const linebot = require('linebot');
 module.exports = function(app) {
     app.get('/store', wrap(async(req, res, next) => {
         if (req.session.admin) {
@@ -19,6 +20,7 @@ module.exports = function(app) {
             res.redirect('/admin/signin')
         }
     }))
+    app.post('/webhook', bot.parser())
 
     app.get('/store/add', wrap(async(req, res, next) => {
         res.render('../views/addstore.html', { infoMessages: req.flash('info'), title: '新增門市' })
