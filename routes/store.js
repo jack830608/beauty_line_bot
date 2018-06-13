@@ -20,12 +20,11 @@ module.exports = function(app) {
             res.redirect('/admin/signin')
         }
     }))
-    app.post('/webhook', bot.parser())
+    app.post('/webhook', wrap(async(req, res, next) => { res.send('Line') }))
 
     app.get('/store/add', wrap(async(req, res, next) => {
         res.render('../views/addstore.html', { infoMessages: req.flash('info'), title: '新增門市' })
-    }))
-    app.post('/store/add', wrap(async(req, res, next) => {
+    })) app.post('/store/add', wrap(async(req, res, next) => {
         let re = await Store.findOne({ name: req.body.name })
         if (re) {
             req.flash('info', '此分店已存在')
@@ -42,8 +41,7 @@ module.exports = function(app) {
             req.flash('info', '門市新增成功')
             res.redirect('/store')
         }
-    }))
-    app.get('/store/update/:id', wrap(async(req, res, next) => {
+    })) app.get('/store/update/:id', wrap(async(req, res, next) => {
         let storeData = await Store.findOne({ _id: req.params.id })
         // let week=["無","星期一","星期二","星期三","星期四","星期五","星期六","星期日"]
         res.render('../views/updatestore.html', {
@@ -102,8 +100,7 @@ module.exports = function(app) {
             res.redirect('/store')
         }
 
-    }))
-    app.post('/store/delete/:id', wrap(async(req, res, next) => {
+    })) app.post('/store/delete/:id', wrap(async(req, res, next) => {
         await Store.remove({ _id: req.params.id })
         console.log('Delete success!');
         req.flash('info', '門市刪除成功')
