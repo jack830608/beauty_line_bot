@@ -57,9 +57,11 @@ app.directive('adminCalendar', function() {
                     var closeDateByWeek = init.closeDateByWeek
                     var dayOfBook = init.dayOfBook
                     var afterBook = init.afterBook
-                    var closeByMonth = closeDateByMonth.split(',').map(function(item) {
-                        return parseInt(item, 10); //將Srting轉成Array
-                    });
+                    if (closeDateByMonth != undefined) {
+                        var closeByMonth = closeDateByMonth.split(',').map(function(item) {
+                            return parseInt(item, 10); //將Srting轉成Array
+                        });
+                    } else { closeByMonth = [] }
 
                     // 當取得特地休假日時
                     $scope.$on('closedList', function(e, closed) {
@@ -203,7 +205,7 @@ app.directive('adminCalendar', function() {
                                 selectedYear = mnthDate.getFullYear();
                                 $scope.displayMonthCalendar();
                             } else if (date.type == 'currentMonth') {
-                                window.open("http://128.199.249.93/#/admin/booking/"  + d, "_self")
+                                window.open("http://128.199.249.93/#/admin/booking/" + d, "_self")
                             }
                             $scope.displayCompleteDate();
                         }
@@ -295,7 +297,7 @@ app.directive('adminCalendar', function() {
                                             } else if (selectedMonth != new Date().getMonth()) { //只要不等於本月訂單全部不可以選
                                                 if (new Date().getDate() + dayOfBook > thisMonthEndingDateLimit &&
                                                     selectedMonth == new Date().getMonth() + 1 &&
-                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart 
+                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart
                                                     // &&
                                                     // (new Date().getDate() + afterBook) - thisMonthEndingDateLimit <= countDatingStart
                                                 )
@@ -319,7 +321,7 @@ app.directive('adminCalendar', function() {
                                             } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                                 console.log('dayOfBook is ' + dayOfBook)
                                                 $scope.datesDisp[i][j] = { "type": "dayOfBook", "date": countDatingStart };
-                                            } 
+                                            }
                                             // else if (new Date().getDate() + afterBook > countDatingStart) { //幾天後可以預約
                                             //     console.log('afterBook is ' + afterBook)
                                             //     $scope.datesDisp[i][j] = { "type": "afterBook", "date": countDatingStart };
@@ -362,7 +364,7 @@ app.directive('adminCalendar', function() {
                                             } else if (selectedMonth != new Date().getMonth()) {
                                                 if (new Date().getDate() + dayOfBook > thisMonthEndingDateLimit &&
                                                     selectedMonth == new Date().getMonth() + 1 &&
-                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart 
+                                                    (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart
                                                     // &&
                                                     // (new Date().getDate() + afterBook) - thisMonthEndingDateLimit <= countDatingStart
 
@@ -386,7 +388,7 @@ app.directive('adminCalendar', function() {
                                             } else if (new Date().getDate() + dayOfBook < countDatingStart) { //幾天前開始接受預約
                                                 console.log('dayOfBook is ' + dayOfBook)
                                                 $scope.datesDisp[i][k] = { "type": "dayOfBook", "date": countDatingStart };
-                                            } 
+                                            }
                                             // else if (new Date().getDate() + afterBook > countDatingStart) { //幾天後可以預約
                                             //     console.log('afterBook is ' + afterBook)
                                             //     $scope.datesDisp[i][k] = { "type": "afterBook", "date": countDatingStart };

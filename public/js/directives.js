@@ -58,9 +58,11 @@ app.directive('myCalendar', function() {
                     var closeDateByWeek = init.closeDateByWeek
                     var dayOfBook = init.dayOfBook
                     var afterBook = init.afterBook
-                    var closeByMonth = closeDateByMonth.split(',').map(function(item) {
-                        return parseInt(item, 10); //將Srting轉成Array
-                    });
+                    if (closeDateByMonth != undefined) {
+                        var closeByMonth = closeDateByMonth.split(',').map(function(item) {
+                            return parseInt(item, 10); //將Srting轉成Array
+                        });
+                    } else { closeByMonth = [] }
 
                     // 當取得特地休假日時
                     $scope.$on('closedList', function(e, closed) {

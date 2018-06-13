@@ -10,15 +10,15 @@ const database = require('./lib/database')
 const Store = require('./models/store')
 const sendMessage = require('./lib/sendMessage')
 const morgan = require('morgan')
-
+const lineBot = require('./resources/line')
 
 nunjucks.configure('views', {
     autoescape: true,
     express: app,
     watch: true
 });
-
-app.use('', require('./resources/line'))
+app.use(lineBot)
+// app.use('', require('./resources/line'))
 app.use(morgan('dev'))
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }))
