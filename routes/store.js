@@ -1,15 +1,7 @@
 const Store = require('../models/store')
 const wrap = require('../lib/async-wrapper')
-const linebot = require('linebot');
 module.exports = function(app) {
-    var bot = linebot({
-        channelId: '1584780131',
-        channelSecret: 'c9efb2ffebcb13edad9989e6057f7467',
-        channelAccessToken: 'Li0ua8fkIwKgTdFfSkij2O1R7f6rnOg9dk7pjzDx1nDddBkIcIKC8uSsfVHtxI3uXB+2+QWDGA2XssRa2AZOCfdCghqzo4TYpD1hF+tP2bZemS4f1LOHbShHQrKruK6jxhaXz0SzBKg2RlrcAdPlDgdB04t89/1O/w1cDnyilFU='
-    });
-    app.post('/webhook', bot.parser())
 
-    
     app.get('/store', wrap(async(req, res, next) => {
         if (req.session.admin) {
             let storeList = await Store.find({})
