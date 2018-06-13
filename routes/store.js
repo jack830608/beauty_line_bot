@@ -19,7 +19,7 @@ module.exports = function(app) {
             req.flash('err', '請先登錄')
             res.redirect('/admin/signin')
         }
-    }))
+    }));
 
     app.get('/store/add', wrap(async(req, res, next) => {
         res.render('../views/addstore.html', { infoMessages: req.flash('info'), title: '新增門市' })
