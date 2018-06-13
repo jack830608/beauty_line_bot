@@ -205,7 +205,7 @@ app.directive('adminCalendar', function() {
                                 selectedYear = mnthDate.getFullYear();
                                 $scope.displayMonthCalendar();
                             } else if (date.type == 'currentMonth') {
-                                window.open("http://128.199.249.93/#/admin/booking/" + d, "_self")
+                                window.open("http://206.189.144.147/#/admin/booking/" + d, "_self")
                             }
                             $scope.displayCompleteDate();
                         }
