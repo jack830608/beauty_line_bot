@@ -1,10 +1,6 @@
 const Store = require('../models/store')
 const wrap = require('../lib/async-wrapper')
-const linebot = require('linebot');
 module.exports = function(app) {
-    app.post('/webhook', wrap(async(req, res, next) => { res.redirect('/admin/signin') }))
-
-
 
     app.get('/store', wrap(async(req, res, next) => {
         if (req.session.admin) {

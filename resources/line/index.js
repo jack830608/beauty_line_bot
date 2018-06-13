@@ -10,7 +10,7 @@ var bot = linebot({
 
 const router = express.Router()
 const linebotParser = bot.parser()
-// router.post('/webhook', linebotParser)
+router.post('/webhook', linebotParser)
 
 
 bot.on('follow', function(event) {
