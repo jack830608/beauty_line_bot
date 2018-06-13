@@ -11,9 +11,7 @@ var bot = linebot({
 const router = express.Router()
 const linebotParser = bot.parser()
 // router.post('/webhook', linebotParser)
-// router.post('/webhook', function(res, req) {
-//     res.send('line')
-// })
+
 
 bot.on('follow', function(event) {
     event.reply('您好,請輸入您的名字');
