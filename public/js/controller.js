@@ -1,7 +1,7 @@
 app.controller('calendarCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
 
     $http.get(URL + "/user/" + userId + '/order')
         .then(function(res, req) {
@@ -20,7 +20,7 @@ app.controller('calendarCtrl', function($scope, $routeParams, $http) {
 
 app.controller('adminCalendarCtrl', function($scope, $routeParams, $http) {
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
     $http.get(URL + "/admin/order")
         .then(function(res, req) {
             $scope.$broadcast('loadEvents', res.data)
@@ -40,7 +40,7 @@ app.controller('bookingCtrl', function($scope, $routeParams, $http) {
     var date = $routeParams.date;
     var userId = $routeParams.userId;
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
     $http.get(URL + "/user/" + date + '/booking')
         .then(function(res, req) {
             $scope.storeLists = res.data[0]
@@ -75,7 +75,7 @@ app.controller('adminBookingCtrl', function($scope, $routeParams, $http) {
     var date = $routeParams.date;
     var userId = $routeParams.userId;
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
     $http.get(URL + "/order/" + date + '/booking')
         .then(function(res, req) {
             $scope.storeLists = res.data[0]
@@ -133,7 +133,7 @@ app.controller('confirmCtrl', function($scope, $routeParams, $http) {
     var date = $routeParams.date;
     var store = $routeParams.store;
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
     $scope.startAt = start
     $scope.endAt = end
     $scope.date = date
@@ -160,7 +160,7 @@ app.controller('confirmCtrl', function($scope, $routeParams, $http) {
 app.controller('completeCtrl', function($scope, $routeParams, $http) {
     var userOrder = $routeParams.userOrder;
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
     $http.get(URL + "/booking/" + userOrder + '/order')
         .then(function(res, req) {
             $scope.startAt = res.data.startAt;
@@ -175,7 +175,7 @@ app.controller('completeCtrl', function($scope, $routeParams, $http) {
 app.controller('myorderCtrl', function($scope, $routeParams, $http) {
     var userId = $routeParams.userId;
     // var URL = 'http://localhost:3000'
-    var URL = 'http://206.189.144.147'
+    var URL = 'http://demo.lifegoez.com'
 
     function getLastDay(year, month) {
         var new_year = year;

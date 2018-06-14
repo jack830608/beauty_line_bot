@@ -209,7 +209,7 @@ app.directive('myCalendar', function() {
                                 selectedYear = mnthDate.getFullYear();
                                 $scope.displayMonthCalendar();
                             } else if (date.type == 'currentMonth') {
-                                window.open("http://206.189.144.147/#/booking/" + $scope.userId + "/" + d, "_self")
+                                window.open("http://demo.lifegoez.com/#/booking/" + $scope.userId + "/" + d, "_self")
                             }
                             $scope.displayCompleteDate();
                         }
