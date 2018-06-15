@@ -6,7 +6,7 @@ var app = angular.module('app', ['ngRoute', 'swipe'], function($routeProvider) {
         templateUrl: 'adminCalendar.html'
     });
     $routeProvider.when('/booking/:userId/:date', {
-        templateUrl: 'Booking.html'
+        templateUrl: 'booking.html'
     });
     $routeProvider.when('/admin/booking/:date', {
         templateUrl: 'adminBooking.html'
