@@ -303,9 +303,7 @@ app.directive('myCalendar', function() {
                                                     selectedMonth == new Date().getMonth() + 1 &&
                                                     (new Date().getDate() + dayOfBook) - thisMonthEndingDateLimit >= countDatingStart &&
                                                     (new Date().getDate() + afterBook) - thisMonthEndingDateLimit <= countDatingStart
-                                                )
-
-                                                {
+                                                ) {
                                                     $scope.datesDisp[i][j] = { "type": "currentMonth", "date": countDatingStart };
                                                     _.map(currentMonthEvents, function(e) { // 尋找當月課程是否與當前同天，有的話則紀錄當天有 event
                                                         var stD = new Date(e.date)
@@ -315,7 +313,11 @@ app.directive('myCalendar', function() {
                                                             console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
                                                             if (countDatingStart - new Date().getDate() > 3) {
                                                                 $scope.datesDisp[i][j]["e"] = true
-                                                            } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][j]["e"] = true } else {
+                                                            } else if (new Date().getMonth() < selectedMonth) {
+                                                                if (thisMonthEndingDateLimit - new Date().getDate() + countDatingStart < 3) {
+                                                                    $scope.datesDisp[i][j]["e"] = false
+                                                                } else { $scope.datesDisp[i][j]["e"] = true }
+                                                            } else {
                                                                 $scope.datesDisp[i][j]["e"] = false
                                                             }
                                                         }
@@ -391,7 +393,11 @@ app.directive('myCalendar', function() {
                                                             console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
                                                             if (countDatingStart - new Date().getDate() > 3) {
                                                                 $scope.datesDisp[i][k]["e"] = true
-                                                            } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][k]["e"] = true } else {
+                                                            } else if (new Date().getMonth() < selectedMonth) {
+                                                                if (thisMonthEndingDateLimit - new Date().getDate() + countDatingStart < 3) {
+                                                                    $scope.datesDisp[i][k]["e"] = false
+                                                                } else { $scope.datesDisp[i][k]["e"] = true }
+                                                            } else {
                                                                 $scope.datesDisp[i][k]["e"] = false
                                                             }
 

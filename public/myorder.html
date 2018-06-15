@@ -46,8 +46,8 @@ tr:nth-child(even) {
                 </td>
                 <td>
                     <button class="btn btn-danger btn-sm" ng-click="cancel(order.id)" ng-if="
-                    ((DD |date:'yyyy')<(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&(DD |date:'MM')<(order.date | date:'MM') &&order.cancel==false &&
-                    (((DD |date:'dd')|int) - endDate) + ((order.date | date:'dd')|int) > 0)||
+                    ((DD |date:'yyyy')<(order.date | date:'yyyy'))||((DD |date:'yyyy')==(order.date | date:'yyyy')&&(DD |date:'MM')<(order.date | date:'MM') && order.cancel==false &&
+                    (endDate-((DD |date:'dd')|int)) + ((order.date | date:'dd')|int) > 3)||
                     ((DD |date:'yyyy')==(order.date | date:'yyyy')&&(DD |date:'MM')==(order.date | date:'MM') &&order.cancel==false &&(order.date | date:'dd')-(DD |date:'dd')>3)">取消</button>
                 </td>
             </tr>

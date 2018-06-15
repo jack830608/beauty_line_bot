@@ -312,7 +312,13 @@ app.directive('adminCalendar', function() {
                                                             console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
                                                             if (countDatingStart - new Date().getDate() > 3) {
                                                                 $scope.datesDisp[i][j]["e"] = true
-                                                            } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][j]["e"] = true } else {
+                                                            } else if (new Date().getMonth() < selectedMonth) {
+                                                                if (thisMonthEndingDateLimit - new Date().getDate() + countDatingStart < 3) {
+                                                                    $scope.datesDisp[i][j]["e"] = false
+                                                                } else {
+                                                                    $scope.datesDisp[i][j]["e"] = true
+                                                                }
+                                                            } else {
                                                                 $scope.datesDisp[i][j]["e"] = false
                                                             }
                                                         }
@@ -347,6 +353,8 @@ app.directive('adminCalendar', function() {
                                             countDatingStart++;
                                         }
                                     }
+
+
                                 } else {
                                     for (var k = 0; k < 7; k++) {
                                         if (countDatingStart <= endingDateLimit) {
@@ -378,7 +386,11 @@ app.directive('adminCalendar', function() {
                                                             console.log('have a order ' + selectedYear + "/" + (selectedMonth + 1) + "/" + countDatingStart);
                                                             if (countDatingStart - new Date().getDate() > 3) {
                                                                 $scope.datesDisp[i][k]["e"] = true
-                                                            } else if (new Date().getMonth() < selectedMonth && new Date().getDate() - thisMonthEndingDateLimit + countDatingStart > 0) { $scope.datesDisp[i][k]["e"] = true } else {
+                                                            } else if (new Date().getMonth() < selectedMonth) {
+                                                                if (thisMonthEndingDateLimit - new Date().getDate() + countDatingStart < 3) {
+                                                                    $scope.datesDisp[i][k]["e"] = false
+                                                                } else { $scope.datesDisp[i][k]["e"] = true }
+                                                            } else {
                                                                 $scope.datesDisp[i][k]["e"] = false
                                                             }
 

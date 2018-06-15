@@ -18,9 +18,9 @@ module.exports = function(app) {
     about(app);
     closed(app);
 
-    // app.get('*', function(req, res) {
-    //     res.render('404.html', {
-    //         title: '404',
-    //     });
-    // })
+    app.get('*', function(req, res) {
+        res.render('404.html', {
+            title: '404',
+        });
+    })
 }
