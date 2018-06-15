@@ -20,7 +20,7 @@ bot.on('follow', function(event) {
 
 
 bot.on('message', async function(event) {
-    var URL = 'http://demo.lifegoez.com'
+    var URL = 'https://api.lifegoez.com'
     let lengthIs10 = String(event.message.text).length
     let onlyNumber = /^\d+$/.test(event.message.text)
     let lineId = event.source.userId

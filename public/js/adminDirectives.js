@@ -205,7 +205,7 @@ app.directive('adminCalendar', function() {
                                 selectedYear = mnthDate.getFullYear();
                                 $scope.displayMonthCalendar();
                             } else if (date.type == 'currentMonth') {
-                                window.open("http://demo.lifegoez.com/#/admin/booking/" + d, "_self")
+                                window.open("https://api.lifegoez.com/#/admin/booking/" + d, "_self")
                             }
                             $scope.displayCompleteDate();
                         }
