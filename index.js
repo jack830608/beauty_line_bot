@@ -17,7 +17,7 @@ nunjucks.configure('views', {
     express: app,
     watch: true
 });
-
+app.use(lineBot)
 // app.use('', require('./resources/line'))
 app.use(morgan('dev'))
 app.use(express.static('public'));
@@ -34,7 +34,7 @@ app.use(session({
 }));
 app.use(flash());
 routes(app);
-app.use(lineBot)
+
 database.connect()
 
 
