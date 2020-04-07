@@ -15,7 +15,7 @@
     "linebot": "^1.4.1",
     "mongoose": "^5.0.15",
     "mongoose-lean-id": "^0.1.0",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "nunjucks": "^3.1.2"
   },
   "devDependencies": {},
